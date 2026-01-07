@@ -1,0 +1,15 @@
+node_modules
+.DS_Store
+dist
+.output
+.nitro
+.vinxi
+.tanstack
+.cache
+.wrangler
+*.log
+.env
+.env.local
+.dev.vars
+src/routeTree.gen.ts
+src/server/cloudflare-env.d.ts

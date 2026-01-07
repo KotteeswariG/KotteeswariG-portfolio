@@ -1,0 +1,46 @@
+{
+  "name": "kotteeswari-portfolio",
+  "private": true,
+  "type": "module",
+  "version": "1.0.0",
+  "sideEffects": [
+    "**/*.css",
+    "src/styles.css"
+  ],
+  "scripts": {
+    "dev": "vite dev",
+    "build": "vite build",
+    "preview": "vite preview",
+    "deploy": "vite build && wrangler deploy",
+    "cf-typegen": "wrangler types ./src/server/cloudflare-env.d.ts",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate:local": "wrangler d1 migrations apply kotteeswari_articles --local",
+    "db:migrate:prod": "wrangler d1 migrations apply kotteeswari_articles --remote",
+    "hash:password": "node ./scripts/hash-password.mjs"
+  },
+  "dependencies": {
+    "@tanstack/react-router": "^1.168.26",
+    "@tanstack/react-start": "^1.167.52",
+    "@uiw/react-md-editor": "^4.1.0",
+    "drizzle-orm": "^0.45.2",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-markdown": "^10.1.0",
+    "rehype-autolink-headings": "^7.1.0",
+    "rehype-highlight": "^7.0.1",
+    "rehype-slug": "^6.0.0",
+    "remark-gfm": "^4.0.1"
+  },
+  "devDependencies": {
+    "@cloudflare/vite-plugin": "^1.34.0",
+    "@cloudflare/workers-types": "^4.20240909.0",
+    "@tanstack/router-plugin": "^1.167.29",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^4.3.4",
+    "drizzle-kit": "^0.31.10",
+    "typescript": "^5.7.2",
+    "vite": "^7.0.0",
+    "wrangler": "^4.86.0"
+  }
+}
