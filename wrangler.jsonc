@@ -1,0 +1,34 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "kotteeswari-portfolio",
+  "compatibility_date": "2025-09-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "main": "src/worker.ts",
+  "workers_dev": true,
+  "preview_urls": true,
+  "observability": {
+    "enabled": true
+  },
+  "routes": [
+    { "pattern": "gkoti.me", "custom_domain": true },
+    { "pattern": "www.gkoti.me", "custom_domain": true }
+  ],
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "kotteeswari_articles",
+      "database_id": "57bea854-19ad-4918-858d-362bb6b194e9",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "ARTICLES_BUCKET",
+      "bucket_name": "kotteeswari-articles"
+    }
+  ],
+  "vars": {
+    "SITE_URL": "https://gkoti.me",
+    "ADMIN_USERNAME": "Kotteeswari"
+  }
+}
