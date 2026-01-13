@@ -72,3 +72,4 @@ export function ThemeToggle({ inline = false }: Props) {
     </button>
   );
 }
+// trying to fix flash on first paint
