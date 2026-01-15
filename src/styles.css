@@ -5083,3 +5083,4 @@ body:has(.admin-login) {
 
 .login-submit:hover:not(:disabled) { background: var(--color-link); }
 .login-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+/* tiny spacing adjustments */
