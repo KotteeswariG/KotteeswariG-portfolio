@@ -5085,3 +5085,4 @@ body:has(.admin-login) {
 .login-submit:disabled { opacity: 0.6; cursor: not-allowed; }
 /* tiny spacing adjustments */
 /* hero spacing fix on small screens */
+/* theme toggle button hover */
