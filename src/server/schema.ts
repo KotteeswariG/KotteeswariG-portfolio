@@ -99,5 +99,3 @@ export type Subcategory = typeof subcategories.$inferSelect;
 export type NewSubcategory = typeof subcategories.$inferInsert;
 export type Article = typeof articles.$inferSelect;
 export type NewArticle = typeof articles.$inferInsert;
-// added created_at default
-// adding categories table next
