@@ -66,3 +66,4 @@ export function ArticleCard({
     </article>
   );
 }
+// trim preview length
