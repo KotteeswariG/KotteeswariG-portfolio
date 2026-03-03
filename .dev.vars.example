@@ -1,0 +1,8 @@
+# Copy this file to `.dev.vars` and fill the values for local development.
+# `.dev.vars` is gitignored and is auto-loaded by wrangler / @cloudflare/vite-plugin.
+
+# Generate with:  pnpm hash:password
+ADMIN_PASSWORD_HASH=pbkdf2$100000$REPLACE_SALT$REPLACE_HASH
+
+# Any long random string. Generate with:  openssl rand -hex 32
+SESSION_SECRET=REPLACE_WITH_LONG_RANDOM_STRING
