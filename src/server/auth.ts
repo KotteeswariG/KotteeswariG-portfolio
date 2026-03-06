@@ -236,3 +236,4 @@ export function clearSessionCookie(): void {
   tssDeleteCookie(SESSION_COOKIE, { path: "/" });
 }
 // session cookie helpers
+// cookie path fix
