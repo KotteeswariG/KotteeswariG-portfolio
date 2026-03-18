@@ -86,3 +86,4 @@ export function MarkdownEditor({
     </div>
   );
 }
+// mobile preview hidden, edit only
