@@ -87,3 +87,4 @@ export function MarkdownEditor({
   );
 }
 // mobile preview hidden, edit only
+// reduce toolbar buttons
