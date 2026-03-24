@@ -322,3 +322,4 @@ export const purgeArticle = createServerFn({ method: "POST" })
     await db.delete(schema.articles).where(eq(schema.articles.id, data.id));
     return { ok: true as const };
   });
+// r2.put for body, d1 update for meta
