@@ -323,3 +323,4 @@ export const purgeArticle = createServerFn({ method: "POST" })
     return { ok: true as const };
   });
 // r2.put for body, d1 update for meta
+// also remove from r2 on delete
