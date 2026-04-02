@@ -193,3 +193,4 @@ export function personJsonLd() {
   };
 }
 // person schema for homepage
+// article schema for article pages
