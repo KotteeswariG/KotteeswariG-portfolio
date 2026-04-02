@@ -192,3 +192,4 @@ export function personJsonLd() {
     ],
   };
 }
+// person schema for homepage
