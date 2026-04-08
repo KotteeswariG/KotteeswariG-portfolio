@@ -129,3 +129,4 @@ export default {
     return startEntry.fetch(request, env, ctx);
   },
 };
+// /sitemap.xml handler
