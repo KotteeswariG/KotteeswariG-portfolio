@@ -130,3 +130,4 @@ export default {
   },
 };
 // /sitemap.xml handler
+// /robots.txt handler
