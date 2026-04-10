@@ -131,3 +131,4 @@ export default {
 };
 // /sitemap.xml handler
 // /robots.txt handler
+// use SITE_URL env for canonical
