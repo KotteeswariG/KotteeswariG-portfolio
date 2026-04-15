@@ -73,3 +73,4 @@ export function useTheme(): {
     mounted,
   };
 }
+// avoid mismatch on first render
