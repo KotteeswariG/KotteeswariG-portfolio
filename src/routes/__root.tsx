@@ -160,4 +160,3 @@ function NotFoundPage() {
     </main>
   );
 }
-// default description text

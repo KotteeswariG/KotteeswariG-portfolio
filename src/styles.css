@@ -5083,25 +5083,3 @@ body:has(.admin-login) {
 
 .login-submit:hover:not(:disabled) { background: var(--color-link); }
 .login-submit:disabled { opacity: 0.6; cursor: not-allowed; }
-/* tiny spacing adjustments */
-/* hero spacing fix on small screens */
-/* theme toggle button hover */
-/* mobile menu padding tweak */
-/* mobile font sizes */
-/* extra colour variables for accents */
-/* sidebar width tweak */
-/* heading anchor style */
-/* markdown body spacing */
-/* article view typography */
-/* small tweaks */
-/* login form styles */
-/* markdown editor dark theme */
-/* editor padding and border */
-/* mobile breakpoint fixes */
-/* sidebar overflow fix */
-/* error message banner */
-/* code block dark contrast */
-/* article card hover */
-/* scrollbar-gutter: stable */
-/* dark theme accents */
-/* final pass cleanup */

@@ -528,4 +528,3 @@ function ProjectCard({
     </article>
   );
 }
-// hero spacing and font weight

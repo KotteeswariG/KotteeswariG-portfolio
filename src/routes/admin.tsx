@@ -40,4 +40,3 @@ function AdminShell() {
     </AdminLayout>
   );
 }
-// redirect to login if not authenticated

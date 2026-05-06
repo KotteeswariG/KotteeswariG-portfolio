@@ -77,5 +77,3 @@ export async function putArticleImage(file: File) {
 
   return { key, url: r2PublicUrl(key) };
 }
-// return null instead of throw on missing
-// use slug as key path

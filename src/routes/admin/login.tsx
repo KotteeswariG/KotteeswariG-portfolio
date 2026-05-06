@@ -97,4 +97,3 @@ function AdminLogin() {
     </>
   );
 }
-// redirect to ?next= after login

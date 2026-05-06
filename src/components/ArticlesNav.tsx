@@ -97,4 +97,3 @@ export function ArticlesNav({
     </nav>
   );
 }
-// fix link active state

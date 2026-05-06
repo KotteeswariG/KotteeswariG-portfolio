@@ -23,5 +23,3 @@ export function MarkdownView({ source }: { source: string }) {
     </div>
   );
 }
-// adjust highlight theme for dark mode
-// gfm tweak

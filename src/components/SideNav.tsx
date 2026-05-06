@@ -182,5 +182,3 @@ export function SideNav() {
     </nav>
   );
 }
-// adjust nav active link colour
-// typo fix

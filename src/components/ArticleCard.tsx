@@ -66,6 +66,3 @@ export function ArticleCard({
     </article>
   );
 }
-// trim preview length
-// nicer date format
-// use intl date format

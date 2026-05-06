@@ -44,4 +44,3 @@ export const getAdminSession = createServerFn({ method: "GET" }).handler(
     return session ? { username: session.sub } : null;
   },
 );
-// guard against missing cookie

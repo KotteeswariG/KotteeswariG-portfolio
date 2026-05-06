@@ -152,4 +152,3 @@ export function AdminLayout({
     </ConfirmProvider>
   );
 }
-// mobile topbar layout

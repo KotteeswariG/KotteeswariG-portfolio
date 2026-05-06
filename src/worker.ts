@@ -129,7 +129,3 @@ export default {
     return startEntry.fetch(request, env, ctx);
   },
 };
-// /sitemap.xml handler
-// /robots.txt handler
-// use SITE_URL env for canonical
-// disallow /admin

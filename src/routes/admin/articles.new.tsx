@@ -392,5 +392,3 @@ export function ArticleForm(p: FormProps) {
     </div>
   );
 }
-// shared form fields next
-// preview pane fix
