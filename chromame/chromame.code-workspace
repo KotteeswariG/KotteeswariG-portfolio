@@ -1,0 +1,53 @@
+{
+  "folders": [
+    {
+      "name": "ChromaMe (root)",
+      "path": "."
+    },
+    {
+      "name": "Backend — Python",
+      "path": "."
+    },
+    {
+      "name": "Frontend — React + Ant Design",
+      "path": "frontend"
+    }
+  ],
+  "settings": {
+    "files.exclude": {
+      "**/.venv": true,
+      "**/__pycache__": true,
+      "**/node_modules": true,
+      "**/.DS_Store": true
+    },
+    "python.defaultInterpreterPath": "${workspaceFolder:Backend — Python}/.venv/bin/python",
+    "python.analysis.extraPaths": ["${workspaceFolder:Backend — Python}"],
+    "[python]": {
+      "editor.formatOnSave": false,
+      "editor.tabSize": 4
+    },
+    "[typescript]": {
+      "editor.tabSize": 2,
+      "editor.formatOnSave": false
+    },
+    "[typescriptreact]": {
+      "editor.tabSize": 2,
+      "editor.formatOnSave": false
+    },
+    "search.exclude": {
+      "**/.venv": true,
+      "**/node_modules": true,
+      "**/dist": true
+    },
+    "terminal.integrated.cwd": "${workspaceFolder:ChromaMe (root)}"
+  },
+  "extensions": {
+    "recommendations": [
+      "ms-python.python",
+      "ms-python.vscode-pylance",
+      "dbaeumer.vscode-eslint",
+      "esbenp.prettier-vscode",
+      "bradlc.vscode-tailwindcss"
+    ]
+  }
+}
