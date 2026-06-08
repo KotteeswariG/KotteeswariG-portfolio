@@ -98,7 +98,7 @@ function CategoryIndex() {
         {articles.length === 0 ? (
           <div className="empty-state">No posts in {category.name} yet.</div>
         ) : (
-          <div className="row blog-post-grid">
+          <div className="blog-post-grid">
             {articles.map((a) => (
               <ArticleCard key={a.id} article={a} />
             ))}

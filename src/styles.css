@@ -1323,14 +1323,43 @@ section.resume-section .resume-date {
 }
 
 /* Blog post card - editorial style, generous breathing room */
+/* Blog listing grid - uniform cards, 1 / 2 / 3 columns by breakpoint */
+.blog-post-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .blog-post-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  .blog-post-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.blog-post-grid-item {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
 .blog-post-card {
   position: relative;
   display: flex;
   flex-direction: column;
   width: 100%;
-  padding: 1.75rem 1.75rem 1.5rem;
+  height: 100%;
+  min-height: 220px;
+  padding: 1.5rem 1.5rem 1.25rem;
   border: 1px solid var(--color-border);
-  border-radius: 10px;
+  border-radius: 12px;
   background: var(--color-card-bg);
   text-decoration: none !important;
   color: inherit !important;
@@ -1357,16 +1386,20 @@ section.resume-section .resume-date {
 .blog-post-card-title {
   font-family: inherit;
   font-weight: 700;
-  font-size: 1.85rem;
-  line-height: 1.15;
+  font-size: 1.35rem;
+  line-height: 1.25;
   letter-spacing: -0.01em;
   color: var(--color-heading);
-  margin: 0 0 0.85rem;
+  margin: 0 0 0.75rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 @media (max-width: 575.98px) {
-  .blog-post-card-title { font-size: 1.5rem; }
-  .blog-post-card { padding: 1.4rem 1.4rem 1.2rem; }
+  .blog-post-card-title { font-size: 1.25rem; }
+  .blog-post-card { padding: 1.25rem 1.25rem 1.1rem; }
 }
 
 .blog-post-card:hover .blog-post-card-title {
@@ -1410,55 +1443,8 @@ section.resume-section .resume-date {
   color: var(--color-primary);
 }
 
-/* Featured (hero) card on the blog index */
-.blog-post-card-featured {
-  padding: 2.25rem 2.25rem 1.75rem;
-  background: linear-gradient(
-    135deg,
-    var(--color-card-bg) 0%,
-    var(--color-bg) 100%
-  );
-}
-
-.blog-post-card-featured .blog-post-card-title {
-  font-size: 2.6rem;
-  line-height: 1.1;
-}
-
-.blog-post-card-featured .blog-post-card-excerpt {
-  font-size: 1.05rem;
-  -webkit-line-clamp: 4;
-  max-width: 720px;
-}
-
-@media (min-width: 768px) {
-  .blog-post-card-featured {
-    padding: 2.5rem 2.5rem 2rem;
-  }
-  .blog-post-card-featured .blog-post-card-title {
-    font-size: 3rem;
-  }
-}
-
-@media (max-width: 575.98px) {
-  .blog-post-card-featured { padding: 1.6rem 1.5rem 1.3rem; }
-  .blog-post-card-featured .blog-post-card-title { font-size: 1.85rem; }
-}
-
-.blog-post-card-featured-flag {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  padding: 0.2rem 0.6rem;
-  font-family: inherit;
-  font-weight: 700;
-  font-size: 0.7rem;
-  letter-spacing: 0;
-  text-transform: none;
-  color: #fff;
-  background: var(--color-primary);
-  border-radius: 999px;
-}
+/* (the "featured" card variant was removed - every card on the listing
+   page now uses the same uniform style for a cleaner, more orderly grid) */
 
 /* ---------- Public blog (My Blog) ----------
    The blog uses the SAME sidebar layout as the portfolio - just with blog

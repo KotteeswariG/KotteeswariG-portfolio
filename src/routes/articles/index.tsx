@@ -80,13 +80,9 @@ function ArticlesIndex() {
             No published posts yet. Check back soon.
           </div>
         ) : (
-          <div className="row blog-post-grid">
-            {articles.map((a, i) => (
-              <ArticleCard
-                key={a.id}
-                article={a}
-                featured={articles.length >= 2 && i === 0}
-              />
+          <div className="blog-post-grid">
+            {articles.map((a) => (
+              <ArticleCard key={a.id} article={a} />
             ))}
           </div>
         )}

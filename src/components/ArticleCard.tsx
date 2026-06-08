@@ -10,21 +10,11 @@ function formatDate(d: Date | null): string {
   });
 }
 
-export function ArticleCard({
-  article,
-  featured = false,
-}: {
-  article: PublicArticleSummary;
-  featured?: boolean;
-}) {
+export function ArticleCard({ article }: { article: PublicArticleSummary }) {
   if (!article.subcategory) return null;
-  const colClass = featured ? "col-12 mb-4 d-flex" : "col-md-6 mb-4 d-flex";
-  const cardClass = featured
-    ? "blog-post-card blog-post-card-featured"
-    : "blog-post-card";
 
   return (
-    <article className={colClass}>
+    <article className="blog-post-grid-item">
       <Link
         to="/articles/$category/$subcategory/$slug"
         params={{
@@ -32,11 +22,8 @@ export function ArticleCard({
           subcategory: article.subcategory.slug,
           slug: article.slug,
         }}
-        className={cardClass}
+        className="blog-post-card"
       >
-        {featured ? (
-          <div className="blog-post-card-featured-flag">Featured</div>
-        ) : null}
         <div className="blog-post-card-tag">
           {article.category.name} · {article.subcategory.name}
         </div>
@@ -55,11 +42,6 @@ export function ArticleCard({
               <span className="blog-post-card-meta-sep" aria-hidden="true">·</span>
               <span>{article.readTimeMinutes} min read</span>
             </>
-          ) : null}
-          {featured ? (
-            <span className="blog-post-card-meta-cta" aria-hidden="true">
-              Read →
-            </span>
           ) : null}
         </div>
       </Link>

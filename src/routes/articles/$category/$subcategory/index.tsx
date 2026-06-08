@@ -91,7 +91,7 @@ function SubcategoryIndex() {
             No posts in {subcategory.name} yet.
           </div>
         ) : (
-          <div className="row">
+          <div className="blog-post-grid">
             {articles.map((a) => (
               <ArticleCard key={a.id} article={a} />
             ))}
