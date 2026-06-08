@@ -7,9 +7,10 @@ import {
   softDeleteArticle,
   updateArticle,
 } from "../../server-fns/admin-articles";
-import { ArticleForm } from "./articles.new";
+import { ArticleForm, AutoSaveBadge } from "./articles.new";
 import type { ArticleStatus } from "../../server/schema";
 import { useConfirm } from "../../components/ConfirmModal";
+import { useAutoSave } from "../../hooks/useAutoSave";
 
 export const Route = createFileRoute("/admin/articles/$id/edit")({
   loader: async ({ params }) => {
@@ -45,11 +46,50 @@ function EditArticle() {
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [savedAt, setSavedAt] = useState<Date | null>(null);
+  const [currentStatus, setCurrentStatus] = useState<ArticleStatus>(
+    article.status,
+  );
+  const [trashed, setTrashed] = useState<boolean>(article.deletedAt !== null);
 
   const subOptions = useMemo(() => {
     const cat = categories.find((c) => c.id === categoryId);
     return cat?.subcategories ?? [];
   }, [categories, categoryId]);
+
+  const canPersist =
+    title.trim().length > 0 && categoryId !== "" && subcategoryId !== "";
+
+  async function persistDraft() {
+    if (!canPersist) return;
+    await updateArticle({
+      data: {
+        id: article.id,
+        title,
+        slug,
+        excerpt: excerpt || null,
+        content,
+        categoryId: Number(categoryId),
+        subcategoryId: Number(subcategoryId),
+        coverImage: coverImage || null,
+        seoTitle: seoTitle || null,
+        seoDescription: seoDescription || null,
+      },
+    });
+    setSavedAt(new Date());
+  }
+
+  const {
+    status: autoStatus,
+    savedAt: autoSavedAt,
+    errorMessage: autoErrorMessage,
+  } = useAutoSave(
+    `${title} ${slug} ${excerpt} ${seoTitle} ${seoDescription} ${coverImage} ${content} ${categoryId} ${subcategoryId}`,
+    {
+      enabled: canPersist,
+      delayMs: 1500,
+      onSave: persistDraft,
+    },
+  );
 
   async function save() {
     if (!title.trim()) {
@@ -78,7 +118,6 @@ function EditArticle() {
         },
       });
       setSavedAt(new Date());
-      router.invalidate();
     } catch (e) {
       setError(e instanceof Error ? e.message : "Failed to save");
     } finally {
@@ -91,7 +130,8 @@ function EditArticle() {
     try {
       await save();
       await setArticleStatus({ data: { id: article.id, status } });
-      router.invalidate();
+      setCurrentStatus(status);
+      setTrashed(false);
     } finally {
       setPending(false);
     }
@@ -115,7 +155,7 @@ function EditArticle() {
     }
   }
 
-  const status = article.deletedAt ? "trashed" : article.status;
+  const status = trashed ? "trashed" : currentStatus;
   const badgeClass: Record<string, string> = {
     draft: "badge-secondary",
     published: "badge-primary",
@@ -145,6 +185,11 @@ function EditArticle() {
               })}
             </span>
           ) : null}
+          <AutoSaveBadge
+            status={autoStatus}
+            savedAt={autoSavedAt}
+            errorMessage={autoErrorMessage}
+          />
         </div>
         <div className="actions">
           <button
@@ -155,7 +200,7 @@ function EditArticle() {
           >
             Save
           </button>
-          {article.status !== "published" ? (
+          {currentStatus !== "published" ? (
             <button
               type="button"
               className="btn btn-sm btn-primary editor-action-btn editor-action-btn--compact editor-action-btn--primary"
@@ -174,7 +219,7 @@ function EditArticle() {
               Unpublish
             </button>
           )}
-          {article.status !== "archived" ? (
+          {currentStatus !== "archived" ? (
             <button
               type="button"
               className="btn btn-sm btn-outline-info editor-action-btn editor-action-btn--compact"
