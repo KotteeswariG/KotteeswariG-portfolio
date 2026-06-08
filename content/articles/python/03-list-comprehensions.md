@@ -1,8 +1,10 @@
 # List Comprehensions in Python
 
-One of the first things that makes Python feel different from other languages is the list comprehension. It is a way to build a new list from an old one in a single short line, where many languages would need a small loop. Once you see how it works, you will probably use it every day.
+The first time I saw a list comprehension I thought "what *is* that". A weird square bracket with a `for` inside, doing the work of a small loop in a single line. Now I write them all the time, and I want to share that "ohhh I get it" moment with you.
 
-The idea is simple. A list comprehension takes a sequence of items, does something to each one, and gives you back a new list of the results. The classic example is squaring numbers. Without a comprehension, the code looks like this:
+### The simplest example
+
+Say you want a list of the first five squares. Without comprehensions, you'd do this:
 
 ```python
 squares = []
@@ -10,49 +12,78 @@ for n in range(5):
     squares.append(n * n)
 ```
 
-That works, but it is a lot of lines for a tiny job. With a list comprehension, the same task fits on one line.
+Works, sure. But it's four lines for a really small job. With a comprehension, it shrinks to one.
 
 ```python
 squares = [n * n for n in range(5)]
 # [0, 1, 4, 9, 16]
 ```
 
-The shape never changes: open square brackets, an expression to produce each value, the word `for`, and the items to walk through. Read it from left to right and it says exactly what it does: *give me `n * n` for each `n` in the range*.
+Read it left to right. "Give me `n * n`, for each `n` in the range." That's literally what it says. Once you read a few of these, your brain stops translating and just sees the meaning.
 
-You can also keep only some of the items by adding an `if` at the end. This turns the comprehension into a filter as well as a transformer.
+Every comprehension follows the same shape:
+
+```python
+[expression for item in iterable]
+```
+
+That's the whole recipe.
+
+### Skipping items with `if`
+
+Sometimes you only want some of the items. Just slap an `if` on the end.
 
 ```python
 evens = [n for n in range(10) if n % 2 == 0]
 # [0, 2, 4, 6, 8]
 ```
 
-The `if` runs once per item. If the condition is false, that item is skipped. So this reads as *give me each `n` from the range, but only when `n` is even*.
+This reads as "give me each `n` from 0 to 9, but only keep it if it's even." The `if` at the end acts like a filter.
 
-There is a second, easy-to-confuse form where the `if` appears at the start of the expression instead. That is not a filter. It is a `if/else` choice, used to pick between two values for each item.
+### Choosing between two values
+
+Here's the part that always confuses people. There are *two* places an `if` can show up, and they mean different things.
+
+* `if` at the **end** → keep or drop the item (it's a filter).
+* `if/else` at the **start** → pick between two values for each item.
 
 ```python
 labels = ["even" if n % 2 == 0 else "odd" for n in range(4)]
 # ["even", "odd", "even", "odd"]
 ```
 
-The rule of thumb is simple. `if` at the end means *keep or skip*. `if/else` at the front means *choose between two outputs*.
+Same word, totally different roles. If that distinction clicks for you now, you're already ahead of where I was for about a month.
 
-You can also write comprehensions with two loops in one line. They walk like nested `for` loops, in the order they appear.
+### Two loops in one line
+
+You can have more than one `for`, and they nest like normal loops, from outer to inner.
 
 ```python
 pairs = [(x, y) for x in [1, 2] for y in ["a", "b"]]
 # [(1, "a"), (1, "b"), (2, "a"), (2, "b")]
 ```
 
-That said, anything beyond two loops or one filter usually reads better as a normal loop. A comprehension is at its best when it stays short and obvious.
+Useful sometimes. But honestly, if it goes any deeper than that, please just write a regular loop. Future you will thank present you for not being clever.
 
-The same pattern works for sets and dictionaries too. Just change the brackets.
+### Same trick for sets and dicts
+
+This pattern works for other containers too. Same idea, different brackets.
 
 ```python
 {n * n for n in range(5)}        # a set
 {n: n * n for n in range(5)}     # a dict
 ```
 
-So when should you use a list comprehension, and when not? Use one when the job is straightforward: take a list, transform every item, maybe skip some. Stick with a normal loop when the work for each item is many lines long, or when you need side effects like printing or logging. The whole point of a comprehension is to be short and clear. If it stops being clear, you have outgrown it.
+So once you know one, you basically know three.
 
-Once you start using comprehensions, you will see them turn what used to be five-line loops into one easy-to-read line, and your Python will start to look much more like the language was meant to look.
+### When *not* to use one
+
+Comprehensions are best for jobs that fit on one line. If you find yourself wanting to:
+
+* do many lines of work per item,
+* print or log things along the way,
+* or use a `try/except` somewhere in the middle,
+
+just write a regular for loop. There's no prize for compressing everything into one line. The point of a comprehension is *clarity*, not cleverness.
+
+That said, once they click, you'll start spotting little chunks of code that should have been comprehensions all along. They take an afternoon to get fluent with, and then you have them forever. Worth the investment.
