@@ -1395,6 +1395,25 @@ section.resume-section .resume-date {
   text-align: right;
 }
 
+.blog-post-list-tag {
+  flex: 0 0 auto;
+  display: inline-block;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  background: rgba(95, 1, 188, 0.1);
+  color: var(--color-primary);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  line-height: 1.4;
+}
+
+[data-theme="dark"] .blog-post-list-tag {
+  background: rgba(196, 165, 240, 0.15);
+}
+
 .blog-post-list-title {
   flex: 1 1 auto;
   font-size: 1rem;
@@ -1427,12 +1446,16 @@ section.resume-section .resume-date {
 
 @media (max-width: 575.98px) {
   .blog-post-list-link {
-    gap: 0.6rem;
+    gap: 0.55rem;
     padding: 0.65rem 0;
   }
   .blog-post-list-num {
     flex: 0 0 1.75rem;
     font-size: 0.9rem;
+  }
+  .blog-post-list-tag {
+    font-size: 0.62rem;
+    padding: 0.1rem 0.45rem;
   }
   .blog-post-list-title {
     font-size: 0.95rem;
