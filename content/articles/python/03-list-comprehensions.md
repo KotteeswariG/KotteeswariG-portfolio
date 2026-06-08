@@ -1,101 +1,107 @@
 # List Comprehensions in Python
 
-A list comprehension is a short way to build a new list from another one. It does the same job as a small `for` loop, but in just one line. Let me show you what it looks like and how to read it.
+A list comprehension is a short way to build a new list from another list. It does the same job as a small `for` loop, but in just one line. Let me show you how it works with a few simple examples.
 
-### Start with the long way
+### Example 1: double every number
 
-Say you want a list of the first five squares (`0`, `1`, `4`, `9`, `16`). With a normal `for` loop, you write something like this:
-
-```python
-squares = []
-for n in range(5):
-    squares.append(n * n)
-
-print(squares)   # [0, 1, 4, 9, 16]
-```
-
-This works fine. But it is four lines for a small job.
-
-### Now the short way
-
-A list comprehension does the same thing in one line:
+Say you have a list of prices and you want to double each one.
 
 ```python
-squares = [n * n for n in range(5)]
-# [0, 1, 4, 9, 16]
+prices = [10, 20, 30, 40]
+
+# The long way
+doubled = []
+for p in prices:
+    doubled.append(p * 2)
+
+# The short way (list comprehension)
+doubled = [p * 2 for p in prices]
+# [20, 40, 60, 80]
 ```
 
-Read it left to right: *for each `n` in the range, give me `n * n`*. That is exactly what the code says.
+Both give the same answer. The short version reads like a sentence: *for each `p` in prices, give me `p * 2`*.
 
-Every list comprehension follows the same shape:
+The pattern is always:
 
 ```python
 [expression for item in iterable]
 ```
 
-* `expression`: what you want for each item.
-* `item`: a name for each value as it goes through.
-* `iterable`: where the items come from (a list, a range, a string, anything you can loop over).
+### Example 2: only keep what you want (with `if`)
 
-### Skip items with `if`
-
-You can add an `if` at the end to keep only some items.
+You can add an `if` at the end to skip some items.
 
 ```python
-evens = [n for n in range(10) if n % 2 == 0]
-# [0, 2, 4, 6, 8]
+numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+evens = [n for n in numbers if n % 2 == 0]
+# [2, 4, 6, 8, 10]
 ```
 
-This says: *give me each `n` from 0 to 9, but only if it is even*. The `if` works like a filter.
+This says: *for each `n` in numbers, but only keep it if it is even*. The `if` here is a **filter**.
 
-### Pick between two values
+### Example 3: pick between two values (with `if/else`)
 
-There is also an `if/else` form. This one goes at the **front** of the expression, not the end. It picks between two values for each item.
+There is another spot where `if/else` can go: at the **front** of the expression. This is not a filter. It picks between two values for each item.
 
 ```python
-labels = ["even" if n % 2 == 0 else "odd" for n in range(4)]
-# ["even", "odd", "even", "odd"]
+scores = [55, 70, 40, 85, 60]
+
+results = ["pass" if s >= 50 else "fail" for s in scores]
+# ["pass", "pass", "fail", "pass", "pass"]
 ```
 
-So here is the rule to remember:
+So remember:
 
-* `if` at the **end** = filter (keep or skip the item).
-* `if/else` at the **front** = choose between two values.
+* `if` at the **end** → keep or skip (a filter).
+* `if/else` at the **front** → choose between two values.
 
 Same word, different jobs.
 
+### Example 4: convert to upper case
+
+```python
+names = ["alice", "bob", "carol"]
+
+shout = [n.upper() for n in names]
+# ["ALICE", "BOB", "CAROL"]
+```
+
+Short, clear, and you do not need a loop at all.
+
 ### Two loops in one line
 
-You can nest two loops in a comprehension. They run from left to right, like normal `for` loops.
+You can also nest two loops. They run left to right.
 
 ```python
 pairs = [(x, y) for x in [1, 2] for y in ["a", "b"]]
 # [(1, "a"), (1, "b"), (2, "a"), (2, "b")]
 ```
 
-If it gets longer than this, write a normal loop. The point of a comprehension is to be short and easy to read.
+Use this for simple cases. If it gets longer, write a normal loop. Clear is better than clever.
 
 ### Same trick for sets and dicts
 
 The same pattern works for sets and dictionaries. Just change the brackets:
 
 ```python
-{n * n for n in range(5)}        # set comprehension
-{n: n * n for n in range(5)}     # dict comprehension
+{n * n for n in range(5)}        # a set
+{n: n * n for n in range(5)}     # a dict (number → its square)
 ```
 
 ### When not to use one
 
-Use a normal `for` loop if:
+A list comprehension is meant to be short and easy to read. Do not use one if:
 
-* Each item needs many lines of work.
-* You need to `print` or log inside the loop.
-* You need to handle errors with `try/except`.
+* The work for each item is many lines.
+* You need to print or log inside.
+* You need `try/except` for errors.
 
-The whole point of a comprehension is to be clear and short. If it is not clear, do not use it.
+For those, use a normal `for` loop. It will be clearer.
 
 ### Wrap up
 
-* Use a comprehension when the job is simple: take a list, change every item, maybe skip some.
+* Use a comprehension when the job is simple: take a list, do one thing to each item, maybe skip some.
 * Use a normal loop when the job is bigger.
-* Practice writing a few. After that, you will read them without thinking.
+
+Once you write a few of these, you will read them naturally and your code will get a lot shorter.
