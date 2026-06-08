@@ -2,6 +2,7 @@ import { sql } from "drizzle-orm";
 import {
   index,
   integer,
+  primaryKey,
   sqliteTable,
   text,
   uniqueIndex,
@@ -93,9 +94,25 @@ export const articles = sqliteTable(
   }),
 );
 
+export const articleViews = sqliteTable(
+  "article_views",
+  {
+    articleId: integer("article_id")
+      .notNull()
+      .references(() => articles.id, { onDelete: "cascade" }),
+    ipHash: text("ip_hash").notNull(),
+    lastSeenAt: integer("last_seen_at", { mode: "timestamp_ms" }).notNull(),
+  },
+  (t) => ({
+    pk: primaryKey({ columns: [t.articleId, t.ipHash] }),
+    lastSeenIdx: index("article_views_last_seen_idx").on(t.lastSeenAt),
+  }),
+);
+
 export type Category = typeof categories.$inferSelect;
 export type NewCategory = typeof categories.$inferInsert;
 export type Subcategory = typeof subcategories.$inferSelect;
 export type NewSubcategory = typeof subcategories.$inferInsert;
 export type Article = typeof articles.$inferSelect;
 export type NewArticle = typeof articles.$inferInsert;
+export type ArticleView = typeof articleViews.$inferSelect;

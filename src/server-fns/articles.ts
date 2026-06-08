@@ -18,13 +18,10 @@ function isBotRequest(): boolean {
   }
 }
 
-// Per-IP view dedup. Lives in the Worker instance's memory, so it resets
-// when Cloudflare cycles the instance — that's the intended "soft" dedup:
-// the same reader won't bump view_count twice within VIEW_WINDOW_MS on a
-// given instance.
+// Per-IP view dedup, backed by D1 so it survives Worker restarts and
+// works across instances. The same reader won't bump view_count twice
+// within VIEW_WINDOW_MS on any instance.
 const VIEW_WINDOW_MS = 6 * 60 * 60 * 1000;
-const MAX_IPS_PER_ARTICLE = 5_000;
-const viewDedupe = new Map<number, Map<string, number>>();
 
 function getClientIp(): string | null {
   try {
@@ -38,28 +35,76 @@ function getClientIp(): string | null {
   }
 }
 
-function shouldCountView(articleId: number, ip: string | null): boolean {
-  if (!ip) return true;
-  const now = Date.now();
-  let perArticle = viewDedupe.get(articleId);
-  if (!perArticle) {
-    perArticle = new Map();
-    viewDedupe.set(articleId, perArticle);
+async function hashIp(ip: string): Promise<string> {
+  // SHA-256 the IP so we don't store raw addresses. The hash is stable
+  // for the dedup window which is all we need.
+  const data = new TextEncoder().encode(`kg-view-salt:${ip}`);
+  const digest = await crypto.subtle.digest("SHA-256", data);
+  const bytes = new Uint8Array(digest);
+  let hex = "";
+  for (let i = 0; i < bytes.length; i++) {
+    hex += bytes[i].toString(16).padStart(2, "0");
   }
-  const last = perArticle.get(ip);
-  if (last !== undefined && now - last < VIEW_WINDOW_MS) {
-    perArticle.set(ip, now);
+  return hex;
+}
+
+/**
+ * Returns true if this IP hasn't viewed this article within VIEW_WINDOW_MS.
+ * Upserts the (articleId, ipHash) row in article_views with the current
+ * timestamp. Safe to call without await on the view-bump itself — the
+ * dedup check is the source of truth.
+ */
+async function shouldCountView(
+  db: ReturnType<typeof getDb>,
+  articleId: number,
+  ip: string | null,
+): Promise<boolean> {
+  if (!ip) return true;
+  const ipHash = await hashIp(ip);
+  const now = new Date();
+  const cutoff = new Date(now.getTime() - VIEW_WINDOW_MS);
+
+  const existing = await db
+    .select({ lastSeenAt: schema.articleViews.lastSeenAt })
+    .from(schema.articleViews)
+    .where(
+      and(
+        eq(schema.articleViews.articleId, articleId),
+        eq(schema.articleViews.ipHash, ipHash),
+      ),
+    )
+    .get();
+
+  if (existing && existing.lastSeenAt > cutoff) {
+    // Recent view from this IP - bump the timestamp but don't count again.
+    await db
+      .update(schema.articleViews)
+      .set({ lastSeenAt: now })
+      .where(
+        and(
+          eq(schema.articleViews.articleId, articleId),
+          eq(schema.articleViews.ipHash, ipHash),
+        ),
+      );
     return false;
   }
-  perArticle.set(ip, now);
-  if (perArticle.size > MAX_IPS_PER_ARTICLE) {
-    const entries = Array.from(perArticle.entries()).sort(
-      (a, b) => a[1] - b[1],
-    );
-    perArticle.clear();
-    for (const [k, v] of entries.slice(Math.floor(entries.length / 2))) {
-      perArticle.set(k, v);
-    }
+
+  if (existing) {
+    await db
+      .update(schema.articleViews)
+      .set({ lastSeenAt: now })
+      .where(
+        and(
+          eq(schema.articleViews.articleId, articleId),
+          eq(schema.articleViews.ipHash, ipHash),
+        ),
+      );
+  } else {
+    await db.insert(schema.articleViews).values({
+      articleId,
+      ipHash,
+      lastSeenAt: now,
+    });
   }
   return true;
 }
@@ -249,21 +294,22 @@ export const getPublishedArticle = createServerFn({ method: "GET" })
     const content = (await getArticleMarkdown(row.article.contentKey)) ?? "";
 
     // Best-effort view-count increment. Skip bots and dedupe by IP within
-    // VIEW_WINDOW_MS so the same reader doesn't double-count. Don't fail
-    // the page render on a D1 hiccup.
+    // VIEW_WINDOW_MS (via article_views table) so the same reader doesn't
+    // double-count. Don't fail the page render on a D1 hiccup.
     let viewCount = row.article.viewCount;
     if (!isBotRequest()) {
       const ip = getClientIp();
-      if (shouldCountView(row.article.id, ip)) {
-        viewCount = viewCount + 1;
-        try {
+      try {
+        if (await shouldCountView(db, row.article.id, ip)) {
+          viewCount = viewCount + 1;
           await db
             .update(schema.articles)
             .set({ viewCount: sql`${schema.articles.viewCount} + 1` })
             .where(eq(schema.articles.id, row.article.id));
-        } catch {
-          // ignore - display the optimistic count anyway
         }
+      } catch (e) {
+        // Don't break the page on a dedup/D1 hiccup.
+        console.error("[view-count]", e);
       }
     }
 
