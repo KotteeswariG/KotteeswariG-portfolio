@@ -6,6 +6,7 @@ import { ConfirmProvider } from "./ConfirmModal";
 
 const EDITOR_URL_RE = /^\/admin\/articles\/(new|\d+\/edit)$/;
 const LAST_EDITOR_KEY = "kg-admin-last-editor";
+const LAST_CATEGORIES_KEY = "kg-admin-last-categories";
 
 export function AdminLayout({
   username,
@@ -16,8 +17,12 @@ export function AdminLayout({
 }) {
   const navigate = useNavigate();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const search = useRouterState({ select: (s) => s.location.searchStr });
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [lastEditorUrl, setLastEditorUrl] = useState<string | null>(null);
+  const [lastCategoriesUrl, setLastCategoriesUrl] = useState<string | null>(
+    null,
+  );
 
   // Track the most recent article-editor URL so the "Articles" tab can
   // bounce the user back to where they were editing, instead of the
@@ -47,6 +52,31 @@ export function AdminLayout({
     }
   }, [pathname]);
 
+  // Same idea for the Categories tab: remember which category was open
+  // (?cat=slug, &mode=new, etc.) so returning from Articles lands the
+  // user back on the same sub-page rather than the default list.
+  useEffect(() => {
+    const realPath =
+      typeof window !== "undefined" ? window.location.pathname : pathname;
+    const realSearch =
+      typeof window !== "undefined" ? window.location.search : search ?? "";
+    if (realPath === "/admin/categories" || realPath.startsWith("/admin/categories/")) {
+      const full = `${realPath}${realSearch}`;
+      try {
+        sessionStorage.setItem(LAST_CATEGORIES_KEY, full);
+      } catch {
+        // ignore
+      }
+      setLastCategoriesUrl(full);
+    } else {
+      try {
+        setLastCategoriesUrl(sessionStorage.getItem(LAST_CATEGORIES_KEY));
+      } catch {
+        setLastCategoriesUrl(null);
+      }
+    }
+  }, [pathname, search]);
+
   const activeTab: "articles" | "categories" | null = (() => {
     const p = pathname.replace(/\/+$/, "") || "/";
     if (p === "/admin/categories" || p.startsWith("/admin/categories/"))
@@ -64,6 +94,16 @@ export function AdminLayout({
   const onEditorPage = EDITOR_URL_RE.test(pathname);
   const articlesHref =
     !onEditorPage && lastEditorUrl ? lastEditorUrl : "/admin";
+
+  // Smart Categories tab destination:
+  //   - currently on categories → keep current URL (no-op)
+  //   - elsewhere with a remembered categories URL → resume there
+  //   - otherwise → default
+  const onCategoriesPage = isCategoriesActive;
+  const categoriesHref =
+    !onCategoriesPage && lastCategoriesUrl
+      ? lastCategoriesUrl
+      : "/admin/categories";
 
   function clearLastEditor() {
     try {
@@ -127,13 +167,18 @@ export function AdminLayout({
             Articles
           </Link>
           <Link
-            to="/admin/categories"
+            to={categoriesHref}
             role="tab"
             aria-selected={isCategoriesActive}
             className={`admin-tab${isCategoriesActive ? " active" : ""}`}
             activeProps={{}}
             inactiveProps={{}}
             onClick={close}
+            title={
+              categoriesHref !== "/admin/categories"
+                ? "Resume where you left off"
+                : "Browse categories"
+            }
           >
             Categories
           </Link>
