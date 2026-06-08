@@ -1,8 +1,8 @@
 # Common Python List Methods
 
-A Python list comes with a handful of small built-in helpers. They cover most of what you'll ever want to do with a list. Here are the ones I use every day, with a simple shopping list as the example.
+A Python list comes with a small set of built-in helpers, called methods. Basically, they cover most of what you ever want to do with a list. Here are the ones I use every day, with a shopping list as the example.
 
-### Add things
+### Adding things
 
 ```python
 shopping = ["milk", "bread"]
@@ -12,20 +12,22 @@ shopping.extend(["butter", "jam"])   # add several
 shopping.insert(0, "tea")            # add at the start
 ```
 
-`append` adds one item. `extend` adds many. `insert(position, value)` puts something at a specific spot.
+`append` adds one. `extend` adds many. `insert(position, value)` puts something at a chosen spot.
 
-### Remove things
+Actually, one common mistake: `shopping.append(["butter", "jam"])` puts the whole inner list as a single item. Use `extend` when you want to merge two lists.
+
+### Removing things
 
 ```python
-shopping.remove("milk")    # remove the first "milk"
-shopping.pop()             # remove and return the last item
-shopping.pop(0)            # remove and return the first item
+shopping.remove("milk")    # finds "milk" and drops it
+shopping.pop()             # removes and returns the last item
+shopping.pop(0)            # removes and returns the first item
 shopping.clear()           # empty the whole list
 ```
 
-`remove` takes a value. `pop` takes a position (the last item if you don't say one). `clear` empties the list.
+`remove` takes a value. `pop` takes a position (defaults to the last). `pop` also gives the item back, which is handy.
 
-### Find things
+### Finding things
 
 ```python
 "milk" in shopping        # True or False
@@ -33,9 +35,9 @@ shopping.index("eggs")    # position of "eggs"
 shopping.count("milk")    # how many "milk"s
 ```
 
-Most of the time you just want `in` to check if something is there.
+Most of the time you just need `in`. Quick and clean.
 
-### Sort things
+### Sorting things
 
 ```python
 words = ["pear", "apple", "cherry"]
@@ -52,21 +54,12 @@ When you loop and want both the position and the value, use this:
 ```python
 for i, name in enumerate(["Alice", "Bob", "Carol"]):
     print(i, name)
-
-# 0 Alice
-# 1 Bob
-# 2 Carol
 ```
 
-Much cleaner than messing about with `range(len(...))`.
+So much cleaner than `for i in range(len(...))`.
 
-### Summary
+### Why does it matter?
 
-Almost every list job is one of these:
+Because almost every list job is one of four things: add, remove, find, or sort. Once you know the methods for each, you write code that just reads cleanly.
 
-* **Add** → `append`, `extend`, `insert`
-* **Remove** → `remove`, `pop`, `clear`
-* **Find** → `in`, `index`, `count`
-* **Sort** → `sort`, `sorted`
-
-Learn these and you're set.
+One small tip: when in doubt, type `dir([])` in a Python shell. It lists every method a list has. Same for any other object.
