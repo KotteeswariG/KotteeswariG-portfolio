@@ -1396,8 +1396,10 @@ section.resume-section .resume-date {
 }
 
 .blog-post-list-tag {
-  flex: 0 0 auto;
-  display: inline-block;
+  flex: 0 0 5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   padding: 0.15rem 0.55rem;
   border-radius: 999px;
   background: rgba(95, 1, 188, 0.1);
@@ -1408,6 +1410,7 @@ section.resume-section .resume-date {
   text-transform: uppercase;
   white-space: nowrap;
   line-height: 1.4;
+  text-align: center;
 }
 
 [data-theme="dark"] .blog-post-list-tag {
@@ -1424,11 +1427,12 @@ section.resume-section .resume-date {
 }
 
 .blog-post-list-time {
-  flex: 0 0 auto;
+  flex: 0 0 3.5rem;
   font-size: 0.78rem;
   color: var(--color-subheading);
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
+  text-align: right;
 }
 
 .blog-post-list-arrow {
@@ -1454,6 +1458,7 @@ section.resume-section .resume-date {
     font-size: 0.9rem;
   }
   .blog-post-list-tag {
+    flex: 0 0 4rem;
     font-size: 0.62rem;
     padding: 0.1rem 0.45rem;
   }
