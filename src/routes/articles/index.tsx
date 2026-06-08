@@ -5,6 +5,14 @@ import { SideNav } from "../../components/SideNav";
 import { Breadcrumbs } from "../../components/Breadcrumbs";
 import { SEO, SITE_URL } from "../../seo";
 
+function formatShortDate(d: Date | null): string {
+  if (!d) return "";
+  return new Date(d).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+  });
+}
+
 export const Route = createFileRoute("/articles/")({
   loader: async () => {
     const articles = await listPublishedArticles({ data: { limit: 100 } });
@@ -33,6 +41,19 @@ export const Route = createFileRoute("/articles/")({
 
 function ArticlesIndex() {
   const { articles } = Route.useLoaderData();
+
+  // Group articles by year (newest year first, newest article first within)
+  const groups = new Map<number, typeof articles>();
+  for (const a of articles) {
+    if (!a.subcategory) continue;
+    const year = a.publishedAt
+      ? new Date(a.publishedAt).getFullYear()
+      : new Date().getFullYear();
+    if (!groups.has(year)) groups.set(year, []);
+    groups.get(year)!.push(a);
+  }
+  const years = Array.from(groups.keys()).sort((a, b) => b - a);
+
   return (
     <>
       <ThemeToggle />
@@ -41,10 +62,10 @@ function ArticlesIndex() {
         <Breadcrumbs items={[{ label: "My Blog" }]} />
 
         <header className="blog-header">
-          <h1>My Blog</h1>
+          <h1>Notes</h1>
           <p className="blog-tagline">
-            Tutorials, notes and writing on web development and software
-            engineering.
+            Short writeups on Python, Express, SQL, and DSA — things I
+            picked up while building.
           </p>
         </header>
 
@@ -53,37 +74,36 @@ function ArticlesIndex() {
             No published posts yet. Check back soon.
           </div>
         ) : (
-          <ol className="blog-post-list" aria-label="Articles, newest first">
-            {articles
-              .filter((a) => a.subcategory)
-              .map((a, i) => (
-                <li key={a.id} className="blog-post-list-item">
-                  <Link
-                    to="/articles/$category/$subcategory/$slug"
-                    params={{
-                      category: a.category.slug,
-                      subcategory: a.subcategory!.slug,
-                      slug: a.slug,
-                    }}
-                    className="blog-post-list-link"
-                  >
-                    <span className="blog-post-list-num">{i + 1}.</span>
-                    <span className="blog-post-list-tag">
-                      {a.category.name}
-                    </span>
-                    <span className="blog-post-list-title">{a.title}</span>
-                    {a.readTimeMinutes ? (
-                      <span className="blog-post-list-time">
-                        {a.readTimeMinutes} min
-                      </span>
-                    ) : null}
-                    <span className="blog-post-list-arrow" aria-hidden="true">
-                      →
-                    </span>
-                  </Link>
-                </li>
-              ))}
-          </ol>
+          <div className="blog-notes" aria-label="Articles, newest first">
+            {years.map((year) => (
+              <section key={year} className="blog-notes-year">
+                <h2 className="blog-notes-year-label">{year}</h2>
+                <ul className="blog-notes-list">
+                  {groups.get(year)!.map((a) => (
+                    <li key={a.id} className="blog-notes-row">
+                      <Link
+                        to="/articles/$category/$subcategory/$slug"
+                        params={{
+                          category: a.category.slug,
+                          subcategory: a.subcategory!.slug,
+                          slug: a.slug,
+                        }}
+                        className="blog-notes-link"
+                      >
+                        <time className="blog-notes-date">
+                          {formatShortDate(a.publishedAt)}
+                        </time>
+                        <span className="blog-notes-title">{a.title}</span>
+                        <span className="blog-notes-cat">
+                          {a.category.slug}
+                        </span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            ))}
+          </div>
         )}
       </main>
     </>

@@ -1357,6 +1357,101 @@ section.resume-section .resume-date {
   text-decoration: none;
 }
 
+/* Blog listing - editorial-style index, grouped by year */
+.blog-notes {
+  margin-top: 0.5rem;
+}
+
+.blog-notes-year {
+  margin-bottom: 2.25rem;
+}
+
+.blog-notes-year-label {
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-subheading);
+  margin: 0 0 0.75rem;
+  padding-bottom: 0.45rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.blog-notes-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.blog-notes-row {
+  margin: 0;
+  padding: 0;
+}
+
+.blog-notes-link {
+  display: grid;
+  grid-template-columns: 4.5rem 1fr auto;
+  align-items: baseline;
+  gap: 1.25rem;
+  padding: 0.55rem 0;
+  text-decoration: none !important;
+  color: inherit !important;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.15s;
+}
+
+.blog-notes-link:hover {
+  border-bottom-color: var(--color-border);
+}
+
+.blog-notes-date {
+  font-size: 0.82rem;
+  color: var(--color-subheading);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.blog-notes-title {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--color-heading);
+  line-height: 1.4;
+  transition: color 0.15s;
+}
+
+.blog-notes-link:hover .blog-notes-title {
+  color: var(--color-primary);
+}
+
+.blog-notes-cat {
+  font-size: 0.72rem;
+  color: var(--color-subheading);
+  text-transform: lowercase;
+  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+@media (max-width: 575.98px) {
+  .blog-notes-link {
+    grid-template-columns: 3.5rem 1fr;
+    gap: 0.75rem;
+    padding: 0.5rem 0;
+  }
+  .blog-notes-date {
+    font-size: 0.75rem;
+  }
+  .blog-notes-title {
+    font-size: 0.95rem;
+  }
+  .blog-notes-cat {
+    grid-column: 2 / 3;
+    font-size: 0.68rem;
+    margin-top: 0.1rem;
+  }
+}
+
 /* Blog listing - simple ordered list view (title + date), newest first */
 .blog-post-list {
   list-style: none;
@@ -1639,26 +1734,27 @@ section.resume-section .resume-date {
 
 /* Blog landing header */
 .blog-header {
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
 }
 
 .blog-header h1 {
-  font-size: 3.5rem;
-  line-height: 1;
-  margin: 0 0 0.6rem;
-  letter-spacing: -0.01em;
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.1;
+  margin: 0 0 0.4rem;
+  letter-spacing: -0.015em;
 }
 
 @media (max-width: 575.98px) {
-  .blog-header h1 { font-size: 2.5rem; }
+  .blog-header h1 { font-size: 1.65rem; }
 }
 
 .blog-tagline {
-  font-size: 1.05rem;
+  font-size: 0.95rem;
   color: var(--color-subheading);
   margin: 0;
-  max-width: 640px;
-  line-height: 1.5;
+  max-width: 560px;
+  line-height: 1.55;
 }
 
 /* Top-level filter pills (All / Tech / Learning / …) */
