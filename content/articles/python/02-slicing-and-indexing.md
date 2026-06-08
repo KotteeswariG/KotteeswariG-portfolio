@@ -1,6 +1,6 @@
 # Slicing and Indexing Python Arrays
 
-Making a list is the easy part. The next thing you almost always want to do is pull pieces out of it — the first item, the last few, every second one, or maybe a chunk from the middle. Python makes this very tidy with two small ideas: indexing and slicing.
+Making a list is the easy part. The next thing you almost always want to do is pull pieces out of it: the first item, the last few, every second one, or maybe a chunk from the middle. Python makes this very tidy with two small ideas: indexing and slicing.
 
 Indexing means asking for a single item by its position. In Python, the first item is at position `0`, the second at `1`, and so on. You can also count from the back using negative numbers, where `-1` is the last item.
 
@@ -15,7 +15,7 @@ letters[-2]    # "d"  - second from last
 
 One thing to keep in mind is that asking for a position that does not exist raises an error. There is no quiet `None`. If you write `letters[99]`, Python will stop and complain.
 
-Slicing is the bigger idea. Instead of one item, you get a piece of the list. You write it as `start:stop` between square brackets. The start is included, the stop is not — a small rule that catches everyone out at first, but you get used to it quickly.
+Slicing is the bigger idea. Instead of one item, you get a piece of the list. You write it as `start:stop` between square brackets. The start is included, the stop is not. This small rule catches everyone out at first, but you get used to it quickly.
 
 ```python
 nums = [10, 20, 30, 40, 50, 60]
@@ -33,7 +33,7 @@ nums[::2]      # [10, 30, 50]                  - every second item
 nums[::-1]     # [60, 50, 40, 30, 20, 10]       - reversed
 ```
 
-Slices are quietly forgiving — if the numbers go past the end of the list, you simply get back what is there, or an empty list. There is no error to handle.
+Slices are quietly forgiving. If the numbers go past the end of the list, you simply get back what is there, or an empty list. There is no error to handle.
 
 Slices are not just for reading. You can also assign to a slice and replace a whole section at once. The replacement can even be a different size from the part you are replacing, and Python will resize the list for you.
 

@@ -2,7 +2,7 @@
 
 If you have been learning Python for a little while, you have probably noticed that people use the words "list" and "array" as if they mean the same thing. They don't. Python actually gives you three different ways to hold a row of values, and each one was built for a different kind of work. Knowing which to pick saves time and keeps your code easy to read.
 
-The one you will use almost every day is the plain `list`. A list is the friendly all-rounder of Python. You can put anything in it — numbers, words, even other lists — and it grows on its own as you add more. You make one with square brackets and reach into it by position.
+The one you will use almost every day is the plain `list`. A list is the friendly all-rounder of Python. You can put anything in it (numbers, words, even other lists), and it grows on its own as you add more. You make one with square brackets and reach into it by position.
 
 ```python
 items = [1, "two", 3.0]
@@ -36,6 +36,6 @@ print(a.mean())   # 2.5
 
 NumPy arrays are the foundation of most data science and machine learning tools in Python, so if you head in that direction you will see them everywhere.
 
-So which one do you reach for? A simple rule works well here. Use a plain `list` by default, because it is friendly and flexible. Use the `array` module only in the rare case you have a tight memory budget for same-type numbers. And use NumPy whenever the job is real number-crunching — averages, vectors, tables, anything where you would otherwise loop over numbers.
+So which one do you reach for? A simple rule works well here. Use a plain `list` by default, because it is friendly and flexible. Use the `array` module only in the rare case you have a tight memory budget for same-type numbers. And use NumPy whenever the job is real number-crunching: averages, vectors, tables, anything where you would otherwise loop over numbers.
 
-Three different tools, the same basic shape — a row of items — just tuned for different jobs.
+Three different tools sharing the same basic shape (a row of items), just tuned for different jobs.

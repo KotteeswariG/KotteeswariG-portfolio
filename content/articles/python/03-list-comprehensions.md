@@ -28,7 +28,7 @@ evens = [n for n in range(10) if n % 2 == 0]
 
 The `if` runs once per item. If the condition is false, that item is skipped. So this reads as *give me each `n` from the range, but only when `n` is even*.
 
-There is a second, easy-to-confuse form where the `if` appears at the start of the expression instead. That is not a filter — it is a `if/else` choice, used to pick between two values for each item.
+There is a second, easy-to-confuse form where the `if` appears at the start of the expression instead. That is not a filter. It is a `if/else` choice, used to pick between two values for each item.
 
 ```python
 labels = ["even" if n % 2 == 0 else "odd" for n in range(4)]
@@ -53,6 +53,6 @@ The same pattern works for sets and dictionaries too. Just change the brackets.
 {n: n * n for n in range(5)}     # a dict
 ```
 
-So when should you use a list comprehension, and when not? Use one when the job is straightforward: take a list, transform every item, maybe skip some. Stick with a normal loop when the work for each item is many lines long, or when you need side effects like printing or logging. The whole point of a comprehension is to be short and clear — if it stops being clear, you have outgrown it.
+So when should you use a list comprehension, and when not? Use one when the job is straightforward: take a list, transform every item, maybe skip some. Stick with a normal loop when the work for each item is many lines long, or when you need side effects like printing or logging. The whole point of a comprehension is to be short and clear. If it stops being clear, you have outgrown it.
 
 Once you start using comprehensions, you will see them turn what used to be five-line loops into one easy-to-read line, and your Python will start to look much more like the language was meant to look.
