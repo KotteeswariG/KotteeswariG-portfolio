@@ -1,8 +1,11 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { logoutAdmin } from "../server-fns/auth";
 import { ThemeToggle } from "./ThemeToggle";
 import { ConfirmProvider } from "./ConfirmModal";
+
+const EDITOR_URL_RE = /^\/admin\/articles\/(new|\d+\/edit)$/;
+const LAST_EDITOR_KEY = "kg-admin-last-editor";
 
 export function AdminLayout({
   username,
@@ -14,6 +17,27 @@ export function AdminLayout({
   const navigate = useNavigate();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [lastEditorUrl, setLastEditorUrl] = useState<string | null>(null);
+
+  // Track the most recent article-editor URL so the "Articles" tab can
+  // bounce the user back to where they were editing, instead of the
+  // list, when they return from Categories.
+  useEffect(() => {
+    if (EDITOR_URL_RE.test(pathname)) {
+      try {
+        sessionStorage.setItem(LAST_EDITOR_KEY, pathname);
+      } catch {
+        // ignore - storage disabled
+      }
+      setLastEditorUrl(pathname);
+    } else {
+      try {
+        setLastEditorUrl(sessionStorage.getItem(LAST_EDITOR_KEY));
+      } catch {
+        setLastEditorUrl(null);
+      }
+    }
+  }, [pathname]);
 
   const activeTab: "articles" | "categories" | null = (() => {
     const p = pathname.replace(/\/+$/, "") || "/";
@@ -24,6 +48,23 @@ export function AdminLayout({
   })();
   const isArticlesActive = activeTab === "articles";
   const isCategoriesActive = activeTab === "categories";
+
+  // Smart Articles tab destination:
+  //   - currently inside an editor → tab acts as "back to list"
+  //   - elsewhere with a remembered editor URL → resume editing
+  //   - otherwise → list
+  const onEditorPage = EDITOR_URL_RE.test(pathname);
+  const articlesHref =
+    !onEditorPage && lastEditorUrl ? lastEditorUrl : "/admin";
+
+  function clearLastEditor() {
+    try {
+      sessionStorage.removeItem(LAST_EDITOR_KEY);
+    } catch {
+      // ignore
+    }
+    setLastEditorUrl(null);
+  }
 
   async function handleLogout() {
     await logoutAdmin();
@@ -62,13 +103,18 @@ export function AdminLayout({
           aria-label="Admin sections"
         >
           <Link
-            to="/admin"
+            to={articlesHref}
             role="tab"
             aria-selected={isArticlesActive}
             className={`admin-tab${isArticlesActive ? " active" : ""}`}
             activeProps={{}}
             inactiveProps={{}}
             onClick={close}
+            title={
+              articlesHref !== "/admin"
+                ? "Resume editing your draft"
+                : "Browse articles"
+            }
           >
             Articles
           </Link>

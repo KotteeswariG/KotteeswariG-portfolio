@@ -149,6 +149,11 @@ function EditArticle() {
     setPending(true);
     try {
       await softDeleteArticle({ data: { id: article.id } });
+      try {
+        sessionStorage.removeItem("kg-admin-last-editor");
+      } catch {
+        // ignore
+      }
       router.navigate({ to: "/admin" });
     } finally {
       setPending(false);
