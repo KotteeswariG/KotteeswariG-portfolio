@@ -264,6 +264,7 @@ function EditArticle() {
         content={content}
         setContent={setContent}
         seoSidebar="right"
+        editorRestoreKey={`edit-${article.id}`}
       />
     </div>
   );
