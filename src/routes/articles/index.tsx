@@ -69,6 +69,14 @@ function ArticlesIndex() {
                   >
                     <span className="blog-post-list-num">{i + 1}.</span>
                     <span className="blog-post-list-title">{a.title}</span>
+                    {a.readTimeMinutes ? (
+                      <span className="blog-post-list-time">
+                        {a.readTimeMinutes} min
+                      </span>
+                    ) : null}
+                    <span className="blog-post-list-arrow" aria-hidden="true">
+                      →
+                    </span>
                   </Link>
                 </li>
               ))}
