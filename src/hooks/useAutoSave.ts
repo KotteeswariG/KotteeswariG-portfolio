@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { useBlocker } from "@tanstack/react-router";
-import { useConfirm } from "../components/ConfirmModal";
 
 export type AutoSaveStatus = "idle" | "pending" | "saving" | "saved" | "error";
 
@@ -65,32 +64,13 @@ export function useAutoSave(signal: unknown, opts: Options) {
     return () => window.removeEventListener("beforeunload", onBeforeUnload);
   }, [dirty]);
 
-  // Block in-app navigation when dirty: ask the user before leaving.
-  // "Stay" cancels the navigation so they keep editing. "Save & continue"
-  // flushes the save first, then proceeds.
-  const confirm = useConfirm();
-  const blocker = useBlocker({
+  // Block in-app navigation only long enough to flush the pending save,
+  // then allow the route change to proceed. No dialog - the user never
+  // sees a prompt; the editor just persists silently before they leave.
+  useBlocker({
     disabled: !enabled,
-    shouldBlockFn: () => dirty,
-    withResolver: true,
-  });
-
-  useEffect(() => {
-    if (blocker.status !== "blocked") return;
-    let cancelled = false;
-    (async () => {
-      const choice = await confirm({
-        title: "Unsaved changes",
-        description:
-          "You have unsaved changes. Save and continue, or stay on this page to keep editing?",
-        confirmLabel: "Save & continue",
-        cancelLabel: "Stay",
-      });
-      if (cancelled) return;
-      if (!choice) {
-        blocker.reset();
-        return;
-      }
+    shouldBlockFn: async () => {
+      if (!dirty) return false;
       try {
         setStatus("saving");
         await onSaveRef.current();
@@ -98,18 +78,19 @@ export function useAutoSave(signal: unknown, opts: Options) {
         setSavedAt(new Date());
         setDirty(false);
         setErrorMessage(null);
-        blocker.proceed();
+        return false;
       } catch (e) {
         setStatus("error");
         setErrorMessage(e instanceof Error ? e.message : "Save failed");
         console.error("[autosave/navguard]", e);
-        blocker.reset();
+        // If the save fails we still let the navigation proceed - the
+        // local form snapshot is in localStorage and sessionStorage, so
+        // the user can come back and pick up where they left off rather
+        // than getting stuck on this page.
+        return false;
       }
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, [blocker, confirm]);
+    },
+  });
 
   return { status, savedAt, dirty, errorMessage };
 }
