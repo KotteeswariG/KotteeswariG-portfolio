@@ -1,71 +1,103 @@
 # Slicing and Indexing Python Arrays
 
-Once you have a list, you will want to take parts of it. Maybe the first item. Maybe the last three. Maybe every second one. Python makes this easy. There are two things to learn: index and slice.
+Once you have a list, you will want to take pieces out of it. Maybe just the first item. Maybe the last three. Maybe every second one. Python has two simple ideas for this: **index** and **slice**.
 
-### Index gets one item
+Let me show you each, with examples you can copy and try.
 
-Every item in a list has a number, called the index. The first item is at 0, the second at 1, and so on. You can also count from the back using negative numbers.
+### Index: pick one item by its position
+
+Every item in a list has a position number. This position is called an *index*. Python starts counting at `0`, not `1`. So the first item has index `0`, the second has index `1`, and so on.
 
 ```python
 letters = ["a", "b", "c", "d", "e"]
-
-letters[0]     # "a"   - first
-letters[2]     # "c"   - third
-letters[-1]    # "e"   - last
-letters[-2]    # "d"   - second from last
+#           0    1    2    3    4
 ```
 
-If you ask for a position that does not exist, Python gives an error. So `letters[99]` will not work.
+Now you can get any item by its index:
 
-### Slice gets a chunk
+```python
+letters[0]     # "a"   - first item
+letters[2]     # "c"   - third item
+```
 
-A slice is two numbers with a colon. Like this: `[start:stop]`. The start is included. The stop is not. Yes, that is a bit odd at first.
+You can also count from the end using negative numbers. `-1` is the last item, `-2` is the second from last:
+
+```python
+letters[-1]    # "e"
+letters[-2]    # "d"
+```
+
+Heads up: if you ask for an index that does not exist, Python gives an error. So `letters[99]` will not work. Make sure your index is inside the list.
+
+### Slice: pick a range of items
+
+A *slice* gives you a chunk of the list. The basic form is two numbers with a colon between them: `[start:stop]`.
+
+* `start` is the first index you want.
+* `stop` is the first index you do **not** want. (Yes, this is a bit odd at first.)
 
 ```python
 nums = [10, 20, 30, 40, 50, 60]
 
-nums[1:4]      # [20, 30, 40]
-nums[:3]       # [10, 20, 30]   - from the start
-nums[3:]       # [40, 50, 60]   - to the end
-nums[:]        # a full copy
+nums[1:4]      # [20, 30, 40]    - items at positions 1, 2, 3
 ```
 
-You can also add a step, which lets you skip items or reverse the list.
+If you skip the start, Python uses `0`. If you skip the stop, Python goes to the end:
+
+```python
+nums[:3]       # [10, 20, 30]   - from the start to position 3
+nums[3:]       # [40, 50, 60]   - from position 3 to the end
+nums[:]        # full copy of the list
+```
+
+### The step: skip items or go backwards
+
+You can also add a third number, called the **step**. It says "take every Nth item". The full form is `[start:stop:step]`.
 
 ```python
 nums[::2]      # [10, 30, 50]                  - every second item
-nums[::-1]     # [60, 50, 40, 30, 20, 10]       - reversed
+nums[::-1]     # [60, 50, 40, 30, 20, 10]       - reversed!
 ```
 
-That last one is a neat trick. One line to reverse a list.
+A negative step reverses the order. One line to flip a whole list.
 
-Good news, slices do not throw errors if the numbers are too big. `nums[10:20]` on a small list just gives you an empty list.
+Nice thing: slices never give errors for being out of range. `nums[10:20]` on a 6-item list just gives you back an empty list `[]`.
 
-### You can change a slice too
+### You can also change a slice
 
-You can also replace a slice with new values. Python will resize the list for you.
+You are not just reading. You can also assign a new value to a slice, and Python will resize the list to match.
 
 ```python
 nums = [1, 2, 3, 4, 5]
 
-nums[1:4] = [99]    # now [1, 99, 5]
-nums[1:1] = [0, 0]  # add new items   -> [1, 0, 0, 99, 5]
-del nums[0:2]       # remove a chunk  -> [0, 99, 5]
+nums[1:4] = [99]     # replace 3 items with 1 item   -> [1, 99, 5]
+nums[1:1] = [0, 0]   # insert 2 items at position 1  -> [1, 0, 0, 99, 5]
+del nums[0:2]        # delete a range                -> [0, 99, 5]
 ```
 
-### A small thing to watch
+### A small trap with copies
 
-`nums[:]` makes a copy, but only of the outer list. If the items inside are also lists, those inner lists are still shared.
+`nums[:]` makes a copy of the list. But if your list has lists inside it, those inner lists are still shared with the original.
 
 ```python
 grid = [[0, 0], [0, 0]]
 copy = grid[:]
 copy[0][0] = 9
-print(grid)    # [[9, 0], [0, 0]]   - oops, original changed
+print(grid)    # [[9, 0], [0, 0]]   - the original changed too!
 ```
 
-For a full deep copy of nested data, use `copy.deepcopy()`.
+For a deep copy that does not share anything, use the `copy` module:
 
-### That is it
+```python
+import copy
+real_copy = copy.deepcopy(grid)
+```
 
-Index for one item. Slice for a chunk. Add a step if you want every Nth one. Once you know these, most "get me part of the list" jobs are a one liner.
+### Quick summary
+
+* `list[i]` gets one item at position `i`.
+* `list[start:stop]` gets a chunk.
+* `list[start:stop:step]` lets you skip or reverse.
+* Slices never crash for out-of-range numbers.
+
+Practice these once and you will use them every day.
