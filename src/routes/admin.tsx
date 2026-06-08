@@ -30,8 +30,17 @@ function AdminShell() {
   const location = useLocation();
   const { session } = Route.useLoaderData();
 
-  if (location.pathname === "/admin/login" || !session) {
+  if (location.pathname === "/admin/login") {
     return <Outlet />;
+  }
+
+  // beforeLoad redirects to /admin/login when there's no session, so this
+  // branch only fires during the brief window where loader data hasn't
+  // caught up with a navigation. Render nothing rather than a bare
+  // <Outlet/>, which would mount the child route without ConfirmProvider
+  // and crash useConfirm().
+  if (!session) {
+    return null;
   }
 
   return (
