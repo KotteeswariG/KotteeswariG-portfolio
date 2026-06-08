@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useBlocker } from "@tanstack/react-router";
 
 export type AutoSaveStatus = "idle" | "pending" | "saving" | "saved" | "error";
 
@@ -62,6 +63,29 @@ export function useAutoSave(signal: unknown, opts: Options) {
     window.addEventListener("beforeunload", onBeforeUnload);
     return () => window.removeEventListener("beforeunload", onBeforeUnload);
   }, [dirty]);
+
+  // Block in-app navigation when dirty: flush the save first, then allow.
+  // If the save fails, block navigation and surface the error.
+  useBlocker({
+    disabled: !enabled,
+    shouldBlockFn: async () => {
+      if (!dirty) return false;
+      try {
+        setStatus("saving");
+        await onSaveRef.current();
+        setStatus("saved");
+        setSavedAt(new Date());
+        setDirty(false);
+        setErrorMessage(null);
+        return false;
+      } catch (e) {
+        setStatus("error");
+        setErrorMessage(e instanceof Error ? e.message : "Save failed");
+        console.error("[autosave/navguard]", e);
+        return true;
+      }
+    },
+  });
 
   return { status, savedAt, dirty, errorMessage };
 }
