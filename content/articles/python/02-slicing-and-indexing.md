@@ -1,12 +1,10 @@
 # Slicing and Indexing Python Arrays
 
-Making a list is easy. Now you want to grab stuff out of it. Maybe the first item, maybe the last three, maybe every second one. This is where Python really shows off, because the syntax is so short you'll feel like you're cheating.
+Once you have a list, you will want to take parts of it. Maybe the first item. Maybe the last three. Maybe every second one. Python makes this easy. There are two things to learn: index and slice.
 
-There are two ideas to know. One is indexing (asking for one item), and the other is slicing (asking for a range). Let's go.
+### Index gets one item
 
-### Indexing: one item, by its number
-
-Each item in a list has a number called the index, and Python counts from zero. So the first item is at `0`, not `1`. (I know. Just go with it.) You can also use negative numbers to count from the back, which is handy.
+Every item in a list has a number, called the index. The first item is at 0, the second at 1, and so on. You can also count from the back using negative numbers.
 
 ```python
 letters = ["a", "b", "c", "d", "e"]
@@ -17,11 +15,11 @@ letters[-1]    # "e"   - last
 letters[-2]    # "d"   - second from last
 ```
 
-Heads up: if you ask for a position that doesn't exist, Python will throw an error. There's no quiet `None`. So `letters[99]` blows up.
+If you ask for a position that does not exist, Python gives an error. So `letters[99]` will not work.
 
-### Slicing: a piece of the list
+### Slice gets a chunk
 
-Now the fun bit. Slicing uses two numbers between square brackets, separated by a colon. The first is where you start, the second is where you stop. Catch is, the stop is *not* included. Weird at first, but you get used to it.
+A slice is two numbers with a colon. Like this: `[start:stop]`. The start is included. The stop is not. Yes, that is a bit odd at first.
 
 ```python
 nums = [10, 20, 30, 40, 50, 60]
@@ -32,44 +30,42 @@ nums[3:]       # [40, 50, 60]   - to the end
 nums[:]        # a full copy
 ```
 
-You can also add a third number, called the step, which lets you skip items or reverse the whole thing. This is one of those tricks that feels like a superpower the first time you use it.
+You can also add a step, which lets you skip items or reverse the list.
 
 ```python
 nums[::2]      # [10, 30, 50]                  - every second item
-nums[::-1]     # [60, 50, 40, 30, 20, 10]       - reversed!
+nums[::-1]     # [60, 50, 40, 30, 20, 10]       - reversed
 ```
 
-Reversed in one line. That's it. That's the trick.
+That last one is a neat trick. One line to reverse a list.
 
-Oh, and one nice thing about slices: they don't blow up when the numbers are too big. `nums[10:20]` on a 6-item list just gives you back an empty list. No error to handle.
+Good news, slices do not throw errors if the numbers are too big. `nums[10:20]` on a small list just gives you an empty list.
 
-### Slices can change the list too
+### You can change a slice too
 
-This one surprised me when I first saw it. You can *assign* to a slice, and Python will replace that chunk for you, even if the new piece is a different size.
+You can also replace a slice with new values. Python will resize the list for you.
 
 ```python
 nums = [1, 2, 3, 4, 5]
 
 nums[1:4] = [99]    # now [1, 99, 5]
-nums[1:1] = [0, 0]  # squeeze new items in    -> [1, 0, 0, 99, 5]
-del nums[0:2]       # delete a whole range    -> [0, 99, 5]
+nums[1:1] = [0, 0]  # add new items   -> [1, 0, 0, 99, 5]
+del nums[0:2]       # remove a chunk  -> [0, 99, 5]
 ```
 
-That last one is `del`, which I forget exists half the time, but it's surprisingly useful when you want to drop a chunk.
+### A small thing to watch
 
-### Quick gotcha to know about
-
-`nums[:]` looks like a tidy way to copy a list, and it is, but only the outer layer. If your list has lists inside it, those inner lists are still shared with the original. Watch what happens here.
+`nums[:]` makes a copy, but only of the outer list. If the items inside are also lists, those inner lists are still shared.
 
 ```python
 grid = [[0, 0], [0, 0]]
 copy = grid[:]
 copy[0][0] = 9
-print(grid)    # [[9, 0], [0, 0]]   - whoa, the original changed too!
+print(grid)    # [[9, 0], [0, 0]]   - oops, original changed
 ```
 
-Got me good the first time. If your data has nested stuff and you want a fully independent copy, use `copy.deepcopy()` from the standard library.
+For a full deep copy of nested data, use `copy.deepcopy()`.
 
-### Wrap up
+### That is it
 
-Once indexing and slicing become muscle memory, half the "get me part of this list" jobs in Python become one-liners. Spend a few minutes playing with negative indexes and the step syntax. After that, you basically have it forever.
+Index for one item. Slice for a chunk. Add a step if you want every Nth one. Once you know these, most "get me part of the list" jobs are a one liner.

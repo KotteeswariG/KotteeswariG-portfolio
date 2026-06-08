@@ -1,12 +1,10 @@
 # Python Lists vs Arrays
 
-Quick question. When you started learning Python, did you also assume "list" and "array" were just two words for the same thing? Yeah, me too. They're not, and figuring out the difference saved me a fair bit of confusion later. So let's walk through it.
+When I started Python, I thought a list and an array were the same thing. They are not. Python has a few ways to hold a row of items, and each one is good for a different job. Let me tell you what I found out.
 
-Python actually gives you three ways to hold a row of values, and each one is good at a different job.
+### The list
 
-### Start here: the plain list
-
-This is the one you'll reach for 90 percent of the time. A `list` is friendly. You make one with square brackets, you can put pretty much anything inside, and it just grows on its own when you add things.
+This is the one you will use most. A list can hold anything. Numbers, words, even other lists. You make one with square brackets.
 
 ```python
 items = [1, "two", 3.0]
@@ -16,11 +14,11 @@ print(items[0])    # 1
 print(items[-1])   # "four"
 ```
 
-Notice you can mix numbers and strings in the same list. Python won't complain. For day to day code, this is honestly all you need.
+That is it. You add things, you read things by position. For most code, a list is enough.
 
-### When a list feels heavy: the array module
+### The array module
 
-Here's something that doesn't come up often. If you're holding a *lot* of numbers and they're all the same type, a normal list uses more memory than it really has to. Python's standard library has a small helper called `array` for exactly that situation.
+Python also has a small thing called `array`. It only holds numbers, and they must all be the same type. It uses less memory than a list.
 
 ```python
 from array import array
@@ -28,11 +26,17 @@ nums = array("i", [1, 2, 3, 4])   # "i" means whole numbers
 nums.append(5)
 ```
 
-It looks and feels like a list, just stricter about types. Don't worry about this one yet. You'll know when you need it.
+You will not need this often. Use it only if you have lots of same type numbers and you care about memory.
 
-### When the work is real math: NumPy
+### NumPy
 
-This is the one people actually mean when they say "Python array" most of the time. NumPy isn't built in. You install it with `pip install numpy`, and then suddenly you can do this:
+For real number work, like big lists of numbers, tables, or images, people use NumPy. It is a library you install:
+
+```bash
+pip install numpy
+```
+
+Then you can do math on a whole array at once, no loop needed.
 
 ```python
 import numpy as np
@@ -42,14 +46,12 @@ print(a * 2)      # [2 4 6 8]
 print(a.mean())   # 2.5
 ```
 
-No loop. The whole array gets multiplied or averaged in one shot. That's the magic moment with NumPy. If you're heading anywhere near data science, machine learning, or anything with serious numbers, you'll see NumPy everywhere.
+That is the cool part. One line does what a `for` loop would do, and it is much faster.
 
-### So which one?
+### So which one
 
-Easiest rule I can give you:
+* Use a normal `list` most of the time.
+* Use the `array` module if you have lots of same type numbers and memory matters.
+* Use NumPy for math, tables, or anything to do with data science.
 
-* For everyday stuff, just use `list`. Don't overthink it.
-* For tight-memory numeric situations, the `array` module is sitting there waiting.
-* For real math, NumPy is the answer.
-
-Same shape underneath (a row of items), three different tools, picked based on the job. That's it.
+Same shape, three tools. Pick the one that fits the job.

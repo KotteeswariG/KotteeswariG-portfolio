@@ -1,89 +1,81 @@
 # List Comprehensions in Python
 
-The first time I saw a list comprehension I thought "what *is* that". A weird square bracket with a `for` inside, doing the work of a small loop in a single line. Now I write them all the time, and I want to share that "ohhh I get it" moment with you.
+A list comprehension is a short way to build a new list. It does the same job as a small `for` loop, but in one line. When I first saw one I was confused, but once I got it, I started using them all the time.
 
-### The simplest example
+### A simple example
 
-Say you want a list of the first five squares. Without comprehensions, you'd do this:
+Say I want a list of squares.
 
 ```python
+# the long way
 squares = []
 for n in range(5):
     squares.append(n * n)
-```
 
-Works, sure. But it's four lines for a really small job. With a comprehension, it shrinks to one.
-
-```python
+# the short way
 squares = [n * n for n in range(5)]
 # [0, 1, 4, 9, 16]
 ```
 
-Read it left to right. "Give me `n * n`, for each `n` in the range." That's literally what it says. Once you read a few of these, your brain stops translating and just sees the meaning.
-
-Every comprehension follows the same shape:
+Both give the same result. Read the short one as: *for each n, give me n times n*. The shape is always:
 
 ```python
 [expression for item in iterable]
 ```
 
-That's the whole recipe.
+### Add an `if` to skip items
 
-### Skipping items with `if`
-
-Sometimes you only want some of the items. Just slap an `if` on the end.
+You can drop in an `if` to keep only some items.
 
 ```python
 evens = [n for n in range(10) if n % 2 == 0]
 # [0, 2, 4, 6, 8]
 ```
 
-This reads as "give me each `n` from 0 to 9, but only keep it if it's even." The `if` at the end acts like a filter.
+This means: *give me each n, but only if it is even*. The `if` is a filter.
 
-### Choosing between two values
+### Pick between two values
 
-Here's the part that always confuses people. There are *two* places an `if` can show up, and they mean different things.
-
-* `if` at the **end** → keep or drop the item (it's a filter).
-* `if/else` at the **start** → pick between two values for each item.
+There is another spot where `if/else` can go. At the front. This is not a filter. It picks between two values for each item.
 
 ```python
 labels = ["even" if n % 2 == 0 else "odd" for n in range(4)]
 # ["even", "odd", "even", "odd"]
 ```
 
-Same word, totally different roles. If that distinction clicks for you now, you're already ahead of where I was for about a month.
+So remember:
 
-### Two loops in one line
+* `if` at the end → keep or skip.
+* `if/else` at the front → choose between two values.
 
-You can have more than one `for`, and they nest like normal loops, from outer to inner.
+### Two loops in one
+
+You can nest loops too.
 
 ```python
 pairs = [(x, y) for x in [1, 2] for y in ["a", "b"]]
 # [(1, "a"), (1, "b"), (2, "a"), (2, "b")]
 ```
 
-Useful sometimes. But honestly, if it goes any deeper than that, please just write a regular loop. Future you will thank present you for not being clever.
+Fine for simple cases. If it gets longer than this, just write a normal loop. Clear beats clever.
 
-### Same trick for sets and dicts
+### Same idea for sets and dicts
 
-This pattern works for other containers too. Same idea, different brackets.
+The same shape works for sets and dicts. Just change the brackets.
 
 ```python
-{n * n for n in range(5)}        # a set
-{n: n * n for n in range(5)}     # a dict
+{n * n for n in range(5)}        # set
+{n: n * n for n in range(5)}     # dict
 ```
 
-So once you know one, you basically know three.
+### When not to use one
 
-### When *not* to use one
+Skip comprehensions if:
 
-Comprehensions are best for jobs that fit on one line. If you find yourself wanting to:
+* The work for each item is many lines.
+* You need to print or log inside.
+* You need `try/except` in the middle.
 
-* do many lines of work per item,
-* print or log things along the way,
-* or use a `try/except` somewhere in the middle,
+For those, a normal loop reads better. The point of a comprehension is to be short and easy to read.
 
-just write a regular for loop. There's no prize for compressing everything into one line. The point of a comprehension is *clarity*, not cleverness.
-
-That said, once they click, you'll start spotting little chunks of code that should have been comprehensions all along. They take an afternoon to get fluent with, and then you have them forever. Worth the investment.
+That is it. Spend an afternoon writing a few, and they will stick.
