@@ -18,6 +18,52 @@ function isBotRequest(): boolean {
   }
 }
 
+// Per-IP view dedup. Lives in the Worker instance's memory, so it resets
+// when Cloudflare cycles the instance — that's the intended "soft" dedup:
+// the same reader won't bump view_count twice within VIEW_WINDOW_MS on a
+// given instance.
+const VIEW_WINDOW_MS = 6 * 60 * 60 * 1000;
+const MAX_IPS_PER_ARTICLE = 5_000;
+const viewDedupe = new Map<number, Map<string, number>>();
+
+function getClientIp(): string | null {
+  try {
+    const cf = getRequestHeader("cf-connecting-ip");
+    if (cf) return cf;
+    const xff = getRequestHeader("x-forwarded-for");
+    if (xff) return xff.split(",")[0]?.trim() ?? null;
+    return null;
+  } catch {
+    return null;
+  }
+}
+
+function shouldCountView(articleId: number, ip: string | null): boolean {
+  if (!ip) return true;
+  const now = Date.now();
+  let perArticle = viewDedupe.get(articleId);
+  if (!perArticle) {
+    perArticle = new Map();
+    viewDedupe.set(articleId, perArticle);
+  }
+  const last = perArticle.get(ip);
+  if (last !== undefined && now - last < VIEW_WINDOW_MS) {
+    perArticle.set(ip, now);
+    return false;
+  }
+  perArticle.set(ip, now);
+  if (perArticle.size > MAX_IPS_PER_ARTICLE) {
+    const entries = Array.from(perArticle.entries()).sort(
+      (a, b) => a[1] - b[1],
+    );
+    perArticle.clear();
+    for (const [k, v] of entries.slice(Math.floor(entries.length / 2))) {
+      perArticle.set(k, v);
+    }
+  }
+  return true;
+}
+
 export type PublicArticleSummary = {
   id: number;
   slug: string;
@@ -202,19 +248,22 @@ export const getPublishedArticle = createServerFn({ method: "GET" })
 
     const content = (await getArticleMarkdown(row.article.contentKey)) ?? "";
 
-    // Best-effort view-count increment. Skip bots (they're ~70% of crawl
-    // traffic on a small blog and would skew the count). Don't await - even
-    // if D1 hiccups, the page should still render.
+    // Best-effort view-count increment. Skip bots and dedupe by IP within
+    // VIEW_WINDOW_MS so the same reader doesn't double-count. Don't fail
+    // the page render on a D1 hiccup.
     let viewCount = row.article.viewCount;
     if (!isBotRequest()) {
-      viewCount = viewCount + 1;
-      try {
-        await db
-          .update(schema.articles)
-          .set({ viewCount: sql`${schema.articles.viewCount} + 1` })
-          .where(eq(schema.articles.id, row.article.id));
-      } catch {
-        // ignore - display the optimistic count anyway
+      const ip = getClientIp();
+      if (shouldCountView(row.article.id, ip)) {
+        viewCount = viewCount + 1;
+        try {
+          await db
+            .update(schema.articles)
+            .set({ viewCount: sql`${schema.articles.viewCount} + 1` })
+            .where(eq(schema.articles.id, row.article.id));
+        } catch {
+          // ignore - display the optimistic count anyway
+        }
       }
     }
 
