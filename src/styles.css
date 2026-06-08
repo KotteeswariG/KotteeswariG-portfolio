@@ -690,7 +690,7 @@ section.resume-section .resume-date {
 
 #skills .skills-inner {
   width: 100%;
-  max-width: 960px;
+  max-width: 100%;
   margin: 0;
   padding-top: 0.5rem;
 }
@@ -723,6 +723,29 @@ section.resume-section .resume-date {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 4rem;
   align-items: start;
+}
+
+/* Four short skill lists in one row (Programming Languages / Frameworks /
+   AWS / Data). Fits the whole skills section into a single viewport on
+   desktop. */
+#skills .skills-quad-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 2.25rem;
+  align-items: start;
+}
+
+/* Three longer skill blurbs (Tools / Core Competencies / Soft Skills)
+   in one row below the quad grid. */
+#skills .skills-trio-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 2.5rem;
+  align-items: start;
+}
+
+#skills .skills-divider {
+  margin: 1.25rem 0;
 }
 
 #skills .skills-section {
@@ -784,22 +807,34 @@ section.resume-section .resume-date {
   }
 }
 
+@media (max-width: 1199.98px) {
+  #skills .skills-quad-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.75rem;
+  }
+  #skills .skills-trio-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+
 @media (max-width: 767.98px) {
   #skills .skills-inner {
     padding-top: 0;
   }
 
   #skills .skills-divider {
-    margin: 1.35rem 0;
+    margin: 1rem 0;
   }
 
-  #skills .skills-top-grid {
+  #skills .skills-top-grid,
+  #skills .skills-quad-grid {
     grid-template-columns: 1fr;
-    gap: 1.5rem;
+    gap: 1.25rem;
   }
 
   #skills .skills-section h3 {
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.6rem;
   }
 }
 

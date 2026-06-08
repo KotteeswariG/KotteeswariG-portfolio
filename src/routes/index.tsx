@@ -322,7 +322,7 @@ function PortfolioPage() {
 
             <div className="skills-divider" aria-hidden="true"></div>
 
-            <div className="skills-top-grid">
+            <div className="skills-quad-grid">
               <section className="skills-section">
                 <h3>Programming Languages</h3>
                 <ul className="skills-list">
@@ -342,11 +342,7 @@ function PortfolioPage() {
                   <li>Streamlit</li>
                 </ul>
               </section>
-            </div>
 
-            <div className="skills-divider" aria-hidden="true"></div>
-
-            <div className="skills-top-grid">
               <section className="skills-section">
                 <h3>AWS &amp; Cloud Services</h3>
                 <ul className="skills-list">
@@ -371,70 +367,69 @@ function PortfolioPage() {
 
             <div className="skills-divider" aria-hidden="true"></div>
 
-            <section className="skills-section">
-              <h3>Tools &amp; Collaboration</h3>
-              <ul className="skills-list">
-                <li>
-                  <strong>Git &amp; GitLab:</strong> Version control and
-                  collaboration on team repositories.
-                </li>
-                <li>
-                  <strong>Jira:</strong> Task management and sprint tracking.
-                </li>
-                <li>
-                  <strong>Confluence:</strong> Technical documentation and
-                  knowledge sharing.
-                </li>
-                <li>
-                  <strong>Code Review:</strong> Reviewing pull requests and
-                  giving constructive feedback to teammates.
-                </li>
-              </ul>
-            </section>
+            <div className="skills-trio-grid">
+              <section className="skills-section">
+                <h3>Tools &amp; Collaboration</h3>
+                <ul className="skills-list">
+                  <li>
+                    <strong>Git &amp; GitLab:</strong> Version control and
+                    collaboration on team repositories.
+                  </li>
+                  <li>
+                    <strong>Jira:</strong> Task management and sprint tracking.
+                  </li>
+                  <li>
+                    <strong>Confluence:</strong> Technical documentation and
+                    knowledge sharing.
+                  </li>
+                  <li>
+                    <strong>Code Review:</strong> Reviewing pull requests and
+                    giving constructive feedback to teammates.
+                  </li>
+                </ul>
+              </section>
 
-            <div className="skills-divider" aria-hidden="true"></div>
+              <section className="skills-section">
+                <h3>Core Competencies</h3>
+                <ul className="skills-list">
+                  <li>
+                    <strong>Backend development:</strong> One year's industry
+                    experience as a Software Engineer.
+                  </li>
+                  <li>
+                    <strong>Web development:</strong> Building responsive,
+                    standards-compliant websites with HTML, CSS, and
+                    TypeScript.
+                  </li>
+                  <li>
+                    <strong>Python programming:</strong> Writing scripts,
+                    automating tasks, and prototyping backend logic.
+                  </li>
+                  <li>
+                    <strong>Version control:</strong> Day-to-day Git and GitLab
+                    use across collaborative projects.
+                  </li>
+                </ul>
+              </section>
 
-            <section className="skills-section">
-              <h3>Core Competencies</h3>
-              <ul className="skills-list">
-                <li>
-                  <strong>Backend development:</strong> One year's industry
-                  experience as a Software Engineer.
-                </li>
-                <li>
-                  <strong>Web development:</strong> Building responsive,
-                  standards-compliant websites with HTML, CSS, and TypeScript.
-                </li>
-                <li>
-                  <strong>Python programming:</strong> Writing scripts,
-                  automating tasks, and prototyping backend logic.
-                </li>
-                <li>
-                  <strong>Version control:</strong> Day-to-day Git and GitLab
-                  use across collaborative projects.
-                </li>
-              </ul>
-            </section>
-
-            <div className="skills-divider" aria-hidden="true"></div>
-
-            <section className="skills-section">
-              <h3>Soft Skills</h3>
-              <ul className="skills-list">
-                <li>
-                  <strong>Problem-solving:</strong> Breaking down technical
-                  challenges and working through them methodically.
-                </li>
-                <li>
-                  <strong>Teamwork:</strong> Collaborating effectively within
-                  cross-functional teams.
-                </li>
-                <li>
-                  <strong>Communication:</strong> Clear written and verbal
-                  communication when presenting work and ideas.
-                </li>
-              </ul>
-            </section>
+              <section className="skills-section">
+                <h3>Soft Skills</h3>
+                <ul className="skills-list">
+                  <li>
+                    <strong>Problem-solving:</strong> Breaking down technical
+                    challenges and working through them methodically.
+                  </li>
+                  <li>
+                    <strong>Teamwork:</strong> Collaborating effectively within
+                    cross-functional teams.
+                  </li>
+                  <li>
+                    <strong>Communication:</strong> Clear written and verbal
+                    communication when presenting work and ideas.
+                  </li>
+                </ul>
+              </section>
+            </div>
           </div>
         </section>
 
