@@ -398,22 +398,25 @@ function CategoryPane({
   }
 
   async function handleDelete() {
+    const parts: string[] = [];
     if (category.articleCount > 0) {
-      await confirm({
-        title: "Can't delete this category",
-        description: `${category.articleCount} article${category.articleCount === 1 ? "" : "s"} still use it. Move or trash ${category.articleCount === 1 ? "it" : "them"} first.`,
-        confirmLabel: "OK",
-        cancelLabel: "Close",
-      });
-      return;
+      parts.push(
+        `${category.articleCount} article${category.articleCount === 1 ? "" : "s"}`,
+      );
     }
+    if (category.subcategories.length > 0) {
+      parts.push(
+        `${category.subcategories.length} subcategor${category.subcategories.length === 1 ? "y" : "ies"}`,
+      );
+    }
+    const cascade =
+      parts.length > 0
+        ? `${parts.join(" and ")} will be permanently deleted with it. `
+        : "";
     const ok = await confirm({
       title: `Delete "${category.name}"?`,
-      description:
-        category.subcategories.length > 0
-          ? `${category.subcategories.length} subcategor${category.subcategories.length === 1 ? "y" : "ies"} will be removed too. This can't be undone.`
-          : "This can't be undone.",
-      confirmLabel: "Delete category",
+      description: `${cascade}This can't be undone.`,
+      confirmLabel: "Delete everything",
       tone: "danger",
     });
     if (ok) onDeleteCategory(category.id);
