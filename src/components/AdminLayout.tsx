@@ -22,14 +22,22 @@ export function AdminLayout({
   // Track the most recent article-editor URL so the "Articles" tab can
   // bounce the user back to where they were editing, instead of the
   // list, when they return from Categories.
+  //
+  // We prefer window.location.pathname over the router's pathname here
+  // because the new-article page rewrites the URL via
+  // history.replaceState (so the in-place auto-save can swap "/new" for
+  // "/<id>/edit" without remounting). The router doesn't observe that
+  // call, so its pathname can lag.
   useEffect(() => {
-    if (EDITOR_URL_RE.test(pathname)) {
+    const realPath =
+      typeof window !== "undefined" ? window.location.pathname : pathname;
+    if (EDITOR_URL_RE.test(realPath)) {
       try {
-        sessionStorage.setItem(LAST_EDITOR_KEY, pathname);
+        sessionStorage.setItem(LAST_EDITOR_KEY, realPath);
       } catch {
         // ignore - storage disabled
       }
-      setLastEditorUrl(pathname);
+      setLastEditorUrl(realPath);
     } else {
       try {
         setLastEditorUrl(sessionStorage.getItem(LAST_EDITOR_KEY));
