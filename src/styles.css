@@ -1357,6 +1357,69 @@ section.resume-section .resume-date {
   text-decoration: none;
 }
 
+/* Blog listing - simple ordered list view (title + date), newest first */
+.blog-post-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--color-border);
+}
+
+.blog-post-list-item {
+  margin: 0;
+  padding: 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.blog-post-list-link {
+  display: flex;
+  align-items: baseline;
+  gap: 1.5rem;
+  padding: 0.75rem 0;
+  text-decoration: none !important;
+  color: inherit !important;
+  transition: color 0.15s;
+}
+
+.blog-post-list-link:hover .blog-post-list-title {
+  color: var(--color-primary);
+}
+
+.blog-post-list-date {
+  flex: 0 0 7.5rem;
+  font-size: 0.85rem;
+  color: var(--color-subheading);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.blog-post-list-title {
+  flex: 1 1 auto;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-heading);
+  line-height: 1.4;
+  transition: color 0.15s;
+}
+
+@media (max-width: 575.98px) {
+  .blog-post-list-link {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.2rem;
+    padding: 0.65rem 0;
+  }
+  .blog-post-list-date {
+    flex: 0 0 auto;
+    font-size: 0.75rem;
+    order: 2;
+  }
+  .blog-post-list-title {
+    order: 1;
+    font-size: 0.95rem;
+  }
+}
+
 /* Blog post card - editorial style, generous breathing room */
 /* Blog listing grid - uniform cards, 1 / 2 / 3 columns by breakpoint */
 .blog-post-grid {

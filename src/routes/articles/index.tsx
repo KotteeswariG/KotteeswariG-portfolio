@@ -1,19 +1,23 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
 import { listPublishedArticles } from "../../server-fns/articles";
-import { listCategoriesWithSubs } from "../../server-fns/categories";
-import { ArticleCard } from "../../components/ArticleCard";
 import { ThemeToggle } from "../../components/ThemeToggle";
 import { SideNav } from "../../components/SideNav";
 import { Breadcrumbs } from "../../components/Breadcrumbs";
 import { SEO, SITE_URL } from "../../seo";
 
+function formatDate(d: Date | null): string {
+  if (!d) return "";
+  return new Date(d).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+}
+
 export const Route = createFileRoute("/articles/")({
   loader: async () => {
-    const [articles, categories] = await Promise.all([
-      listPublishedArticles({ data: { limit: 50 } }),
-      listCategoriesWithSubs(),
-    ]);
-    return { articles, categories };
+    const articles = await listPublishedArticles({ data: { limit: 100 } });
+    return { articles };
   },
   head: () => ({
     meta: [
@@ -37,7 +41,7 @@ export const Route = createFileRoute("/articles/")({
 });
 
 function ArticlesIndex() {
-  const { articles, categories } = Route.useLoaderData();
+  const { articles } = Route.useLoaderData();
   return (
     <>
       <ThemeToggle />
@@ -53,38 +57,33 @@ function ArticlesIndex() {
           </p>
         </header>
 
-        {categories.length > 0 ? (
-          <nav className="blog-filter-pills" aria-label="Topics">
-            <Link
-              to="/articles"
-              className="blog-filter-pill active"
-              aria-current="page"
-            >
-              All
-            </Link>
-            {categories.map((c) => (
-              <Link
-                key={c.id}
-                to="/articles/$category"
-                params={{ category: c.slug }}
-                className="blog-filter-pill"
-              >
-                {c.name}
-              </Link>
-            ))}
-          </nav>
-        ) : null}
-
         {articles.length === 0 ? (
           <div className="empty-state">
             No published posts yet. Check back soon.
           </div>
         ) : (
-          <div className="blog-post-grid">
-            {articles.map((a) => (
-              <ArticleCard key={a.id} article={a} />
-            ))}
-          </div>
+          <ul className="blog-post-list" aria-label="Articles, newest first">
+            {articles.map((a) =>
+              a.subcategory ? (
+                <li key={a.id} className="blog-post-list-item">
+                  <Link
+                    to="/articles/$category/$subcategory/$slug"
+                    params={{
+                      category: a.category.slug,
+                      subcategory: a.subcategory.slug,
+                      slug: a.slug,
+                    }}
+                    className="blog-post-list-link"
+                  >
+                    <span className="blog-post-list-date">
+                      {a.publishedAt ? formatDate(a.publishedAt) : ""}
+                    </span>
+                    <span className="blog-post-list-title">{a.title}</span>
+                  </Link>
+                </li>
+              ) : null,
+            )}
+          </ul>
         )}
       </main>
     </>
