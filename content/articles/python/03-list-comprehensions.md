@@ -1,107 +1,61 @@
 # List Comprehensions in Python
 
-A list comprehension is a short way to build a new list from another list. It does the same job as a small `for` loop, but in just one line. Let me show you how it works with a few simple examples.
+A list comprehension is just a short way to build a new list from an old one. That's it. Where you would normally write a small loop, you write one line instead.
 
-### Example 1: double every number
+### The basic idea
 
 Say you have a list of prices and you want to double each one.
 
-```python
-prices = [10, 20, 30, 40]
+The loop way:
 
-# The long way
+```python
+prices = [10, 20, 30]
 doubled = []
 for p in prices:
     doubled.append(p * 2)
+```
 
-# The short way (list comprehension)
+The shorter way:
+
+```python
 doubled = [p * 2 for p in prices]
-# [20, 40, 60, 80]
+# [20, 40, 60]
 ```
 
-Both give the same answer. The short version reads like a sentence: *for each `p` in prices, give me `p * 2`*.
+Read it left to right: *for each `p` in prices, give me `p * 2`*. The square brackets make it a list. Same result, one line.
 
-The pattern is always:
+### Keep only what you want
 
-```python
-[expression for item in iterable]
-```
-
-### Example 2: only keep what you want (with `if`)
-
-You can add an `if` at the end to skip some items.
+You can add an `if` to skip some items.
 
 ```python
-numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-
+numbers = [1, 2, 3, 4, 5, 6]
 evens = [n for n in numbers if n % 2 == 0]
-# [2, 4, 6, 8, 10]
+# [2, 4, 6]
 ```
 
-This says: *for each `n` in numbers, but only keep it if it is even*. The `if` here is a **filter**.
+This says: *for each `n`, but only if it is even*.
 
-### Example 3: pick between two values (with `if/else`)
+### Pass or fail
 
-There is another spot where `if/else` can go: at the **front** of the expression. This is not a filter. It picks between two values for each item.
+You can also pick between two values for each item.
 
 ```python
-scores = [55, 70, 40, 85, 60]
-
-results = ["pass" if s >= 50 else "fail" for s in scores]
-# ["pass", "pass", "fail", "pass", "pass"]
+scores = [55, 70, 40, 85]
+result = ["pass" if s >= 50 else "fail" for s in scores]
+# ["pass", "pass", "fail", "pass"]
 ```
 
-So remember:
+Two simple uses, one short line.
 
-* `if` at the **end** → keep or skip (a filter).
-* `if/else` at the **front** → choose between two values.
+### When not to use it
 
-Same word, different jobs.
+If the job needs many lines of work for each item, or you need to print stuff, or handle errors, just write a regular `for` loop. List comprehensions are for short, simple jobs. The whole point is to read like a sentence.
 
-### Example 4: convert to upper case
+### That's it
 
-```python
-names = ["alice", "bob", "carol"]
+* `[expr for item in list]` → make a new list.
+* `[expr for item in list if condition]` → only keep some.
+* `[a if cond else b for item in list]` → pick between two.
 
-shout = [n.upper() for n in names]
-# ["ALICE", "BOB", "CAROL"]
-```
-
-Short, clear, and you do not need a loop at all.
-
-### Two loops in one line
-
-You can also nest two loops. They run left to right.
-
-```python
-pairs = [(x, y) for x in [1, 2] for y in ["a", "b"]]
-# [(1, "a"), (1, "b"), (2, "a"), (2, "b")]
-```
-
-Use this for simple cases. If it gets longer, write a normal loop. Clear is better than clever.
-
-### Same trick for sets and dicts
-
-The same pattern works for sets and dictionaries. Just change the brackets:
-
-```python
-{n * n for n in range(5)}        # a set
-{n: n * n for n in range(5)}     # a dict (number → its square)
-```
-
-### When not to use one
-
-A list comprehension is meant to be short and easy to read. Do not use one if:
-
-* The work for each item is many lines.
-* You need to print or log inside.
-* You need `try/except` for errors.
-
-For those, use a normal `for` loop. It will be clearer.
-
-### Wrap up
-
-* Use a comprehension when the job is simple: take a list, do one thing to each item, maybe skip some.
-* Use a normal loop when the job is bigger.
-
-Once you write a few of these, you will read them naturally and your code will get a lot shorter.
+Try a few. Once they click, you'll see places to use them everywhere.

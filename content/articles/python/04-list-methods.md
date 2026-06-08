@@ -1,89 +1,56 @@
 # Common Python List Methods
 
-A *method* is a small function that comes attached to a list. You call one like this: `mylist.method_name(...)`. Python lists have a small set of these built in. Let me walk through the ones you will use the most, using a simple shopping list as the example.
+A Python list comes with a handful of small built-in helpers. They cover most of what you'll ever want to do with a list. Here are the ones I use every day, with a simple shopping list as the example.
 
-### Add items
-
-You have three choices, depending on what you want to add.
+### Add things
 
 ```python
 shopping = ["milk", "bread"]
 
-shopping.append("eggs")              # ["milk", "bread", "eggs"]
-shopping.extend(["butter", "jam"])   # ["milk", "bread", "eggs", "butter", "jam"]
-shopping.insert(0, "tea")            # ["tea", "milk", "bread", "eggs", "butter", "jam"]
+shopping.append("eggs")              # add one to the end
+shopping.extend(["butter", "jam"])   # add several
+shopping.insert(0, "tea")            # add at the start
 ```
 
-* `append(value)` → add **one** item to the end.
-* `extend(other_list)` → add **many** items to the end.
-* `insert(position, value)` → add an item at a chosen position.
+`append` adds one item. `extend` adds many. `insert(position, value)` puts something at a specific spot.
 
-Tip: if you do `shopping.append(["butter", "jam"])`, the whole inner list is added as one item. Almost never what you want. Use `extend` when you want to merge two lists.
-
-### Remove items
-
-Same idea, but going the other way.
+### Remove things
 
 ```python
-shopping = ["milk", "bread", "eggs", "milk"]
-
-shopping.remove("milk")    # removes the first "milk"  -> ["bread", "eggs", "milk"]
-shopping.pop()             # removes the last item     -> "milk", list becomes ["bread", "eggs"]
-shopping.pop(0)            # removes at position 0     -> "bread", list becomes ["eggs"]
+shopping.remove("milk")    # remove the first "milk"
+shopping.pop()             # remove and return the last item
+shopping.pop(0)            # remove and return the first item
 shopping.clear()           # empty the whole list
 ```
 
-* `remove(value)` → finds a value and drops it.
-* `pop()` → removes the last item and gives it back to you.
-* `pop(position)` → removes at a given position and gives it back.
-* `clear()` → empties the list.
-
-Useful fact: `pop` returns the thing it removed, so you can use it. `remove` does not.
+`remove` takes a value. `pop` takes a position (the last item if you don't say one). `clear` empties the list.
 
 ### Find things
 
-Three tools for asking questions about a list.
-
 ```python
-fruits = ["apple", "banana", "mango", "banana"]
-
-"mango" in fruits        # True
-"grape" in fruits        # False
-fruits.index("banana")   # 1   - position of the first "banana"
-fruits.count("banana")   # 2   - how many "banana"s in the list
+"milk" in shopping        # True or False
+shopping.index("eggs")    # position of "eggs"
+shopping.count("milk")    # how many "milk"s
 ```
 
-* `value in list` → True or False.
-* `list.index(value)` → position of the first match.
-* `list.count(value)` → how many times the value appears.
+Most of the time you just want `in` to check if something is there.
 
-Small note: `index` throws an error if the value is not in the list. Best to check with `in` first.
-
-### Sort items
-
-For sorting, you have two options. They look alike but behave differently.
+### Sort things
 
 ```python
 words = ["pear", "apple", "cherry"]
-
-words.sort()               # changes the list  -> ["apple", "cherry", "pear"]
-words.sort(reverse=True)   # reverse order     -> ["pear", "cherry", "apple"]
-words.sort(key=len)        # sort by string length
+words.sort()              # ["apple", "cherry", "pear"]
+words.sort(reverse=True)  # ["pear", "cherry", "apple"]
 ```
 
-* `list.sort()` → changes the list in place.
-* `sorted(list)` → makes a new sorted list and leaves the original alone.
-
-The `key=` option is very handy. It takes a small function and sorts by what that function returns. So `sort(key=len)` sorts by length.
+`sort()` changes the list. If you want a new sorted list and keep the original, use `sorted(words)` instead.
 
 ### Bonus: enumerate
 
-Not a list method, but it goes nicely with loops. When you want both the position and the value as you loop, use `enumerate`.
+When you loop and want both the position and the value, use this:
 
 ```python
-guests = ["Alice", "Bob", "Carol"]
-
-for i, name in enumerate(guests):
+for i, name in enumerate(["Alice", "Bob", "Carol"]):
     print(i, name)
 
 # 0 Alice
@@ -91,15 +58,15 @@ for i, name in enumerate(guests):
 # 2 Carol
 ```
 
-So much cleaner than writing `for i in range(len(guests))`.
+Much cleaner than messing about with `range(len(...))`.
 
 ### Summary
 
-Most list work falls into four buckets:
+Almost every list job is one of these:
 
-* **Add** with `append`, `extend`, `insert`
-* **Remove** with `remove`, `pop`, `clear`
-* **Find** with `in`, `index`, `count`
-* **Sort** with `sort`, `sorted`
+* **Add** → `append`, `extend`, `insert`
+* **Remove** → `remove`, `pop`, `clear`
+* **Find** → `in`, `index`, `count`
+* **Sort** → `sort`, `sorted`
 
-Memorize these and you can handle nearly every list job in Python.
+Learn these and you're set.
