@@ -5,15 +5,6 @@ import { SideNav } from "../../components/SideNav";
 import { Breadcrumbs } from "../../components/Breadcrumbs";
 import { SEO, SITE_URL } from "../../seo";
 
-function formatDate(d: Date | null): string {
-  if (!d) return "";
-  return new Date(d).toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
-}
-
 export const Route = createFileRoute("/articles/")({
   loader: async () => {
     const articles = await listPublishedArticles({ data: { limit: 100 } });
@@ -62,28 +53,26 @@ function ArticlesIndex() {
             No published posts yet. Check back soon.
           </div>
         ) : (
-          <ul className="blog-post-list" aria-label="Articles, newest first">
-            {articles.map((a) =>
-              a.subcategory ? (
+          <ol className="blog-post-list" aria-label="Articles, newest first">
+            {articles
+              .filter((a) => a.subcategory)
+              .map((a, i) => (
                 <li key={a.id} className="blog-post-list-item">
                   <Link
                     to="/articles/$category/$subcategory/$slug"
                     params={{
                       category: a.category.slug,
-                      subcategory: a.subcategory.slug,
+                      subcategory: a.subcategory!.slug,
                       slug: a.slug,
                     }}
                     className="blog-post-list-link"
                   >
-                    <span className="blog-post-list-date">
-                      {a.publishedAt ? formatDate(a.publishedAt) : ""}
-                    </span>
+                    <span className="blog-post-list-num">{i + 1}.</span>
                     <span className="blog-post-list-title">{a.title}</span>
                   </Link>
                 </li>
-              ) : null,
-            )}
-          </ul>
+              ))}
+          </ol>
         )}
       </main>
     </>
