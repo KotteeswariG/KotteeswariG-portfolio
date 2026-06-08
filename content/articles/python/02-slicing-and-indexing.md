@@ -1,64 +1,59 @@
 # Slicing and Indexing Python Arrays
 
-Once you know how to make a list, the next thing you want is to pull pieces out of it. Python's slicing syntax is one of the friendliest in any language I've used, and it covers a lot of ground in a few characters.
+Making a list is the easy part. The next thing you almost always want to do is pull pieces out of it — the first item, the last few, every second one, or maybe a chunk from the middle. Python makes this very tidy with two small ideas: indexing and slicing.
 
-## Indexing — single elements
-
-Indexes start at `0`, and negative indexes count from the end.
+Indexing means asking for a single item by its position. In Python, the first item is at position `0`, the second at `1`, and so on. You can also count from the back using negative numbers, where `-1` is the last item.
 
 ```python
 letters = ["a", "b", "c", "d", "e"]
-letters[0]   # "a"
-letters[2]   # "c"
-letters[-1]  # "e" - last item
-letters[-2]  # "d" - second from last
+
+letters[0]     # "a"  - first
+letters[2]     # "c"  - third
+letters[-1]    # "e"  - last
+letters[-2]    # "d"  - second from last
 ```
 
-Going past the end raises `IndexError`. There's no silent fallback to `None`.
+One thing to keep in mind is that asking for a position that does not exist raises an error. There is no quiet `None`. If you write `letters[99]`, Python will stop and complain.
 
-## Slicing — sub-sequences
-
-Slicing uses `start:stop:step`. `start` is inclusive, `stop` is exclusive, both are optional.
+Slicing is the bigger idea. Instead of one item, you get a piece of the list. You write it as `start:stop` between square brackets. The start is included, the stop is not — a small rule that catches everyone out at first, but you get used to it quickly.
 
 ```python
 nums = [10, 20, 30, 40, 50, 60]
 
-nums[1:4]    # [20, 30, 40]
-nums[:3]     # [10, 20, 30]   - from the start
-nums[3:]     # [40, 50, 60]   - to the end
-nums[:]      # full shallow copy
-nums[::2]    # [10, 30, 50]   - every second
-nums[::-1]   # [60, 50, 40, 30, 20, 10] - reversed
+nums[1:4]      # [20, 30, 40]
+nums[:3]       # [10, 20, 30]   - from the very start
+nums[3:]       # [40, 50, 60]   - to the very end
+nums[:]        # a full copy
 ```
 
-The slice never raises for out-of-range bounds. `nums[10:20]` on a 6-item list just returns `[]`.
+You can also add a third value, the step, which lets you skip items or reverse the list. The full form is `[start:stop:step]`.
 
-## Assigning to a slice
+```python
+nums[::2]      # [10, 30, 50]                  - every second item
+nums[::-1]     # [60, 50, 40, 30, 20, 10]       - reversed
+```
 
-Slices aren't just read-only. You can replace a range with a different-sized sequence.
+Slices are quietly forgiving — if the numbers go past the end of the list, you simply get back what is there, or an empty list. There is no error to handle.
+
+Slices are not just for reading. You can also assign to a slice and replace a whole section at once. The replacement can even be a different size from the part you are replacing, and Python will resize the list for you.
 
 ```python
 nums = [1, 2, 3, 4, 5]
-nums[1:4] = [99]      # nums is now [1, 99, 5]
-nums[1:1] = [0, 0]    # insert without replacing - [1, 0, 0, 99, 5]
-del nums[1:3]         # delete the slice - [1, 99, 5]
+
+nums[1:4] = [99]    # now [1, 99, 5]
+nums[1:1] = [0, 0]  # insert without replacing -> [1, 0, 0, 99, 5]
+del nums[0:2]       # remove a chunk           -> [0, 99, 5]
 ```
 
-This is one of those features I underuse and then remember and feel pleased about.
-
-## A small gotcha — shallow copies
-
-`nums[:]` gives you a new list but doesn't copy nested objects.
+The last thing worth knowing is a small trap when you copy a list with `[:]`. It makes a new outer list, but if there are lists inside, those inner lists are still shared. If you change the inside, you change the original too.
 
 ```python
 grid = [[0, 0], [0, 0]]
 copy = grid[:]
 copy[0][0] = 9
-print(grid)  # [[9, 0], [0, 0]]  - the inner list was shared
+print(grid)    # [[9, 0], [0, 0]]  - the inner list was shared
 ```
 
-For nested data use `copy.deepcopy()`.
+If your data is nested and you need a fully independent copy, reach for the `copy` module and use `copy.deepcopy()`.
 
-## What I take away
-
-Indexing and slicing handle most of the "get me part of this list" cases without a loop. Knowing the three-argument slice (`start:stop:step`) and that slice assignment can resize the list covers nearly everything I've needed so far.
+Once you have indexing and slicing in your fingers, almost every "give me part of this list" task in Python becomes a one-liner. They are the kind of small features that, once you have used them for a week, you cannot imagine writing code without.
