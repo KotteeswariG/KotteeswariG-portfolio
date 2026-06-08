@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useBlocker } from "@tanstack/react-router";
+import { useConfirm } from "../components/ConfirmModal";
 
 export type AutoSaveStatus = "idle" | "pending" | "saving" | "saved" | "error";
 
@@ -64,12 +65,32 @@ export function useAutoSave(signal: unknown, opts: Options) {
     return () => window.removeEventListener("beforeunload", onBeforeUnload);
   }, [dirty]);
 
-  // Block in-app navigation when dirty: flush the save first, then allow.
-  // If the save fails, block navigation and surface the error.
-  useBlocker({
+  // Block in-app navigation when dirty: ask the user before leaving.
+  // "Stay" cancels the navigation so they keep editing. "Save & continue"
+  // flushes the save first, then proceeds.
+  const confirm = useConfirm();
+  const blocker = useBlocker({
     disabled: !enabled,
-    shouldBlockFn: async () => {
-      if (!dirty) return false;
+    shouldBlockFn: () => dirty,
+    withResolver: true,
+  });
+
+  useEffect(() => {
+    if (blocker.status !== "blocked") return;
+    let cancelled = false;
+    (async () => {
+      const choice = await confirm({
+        title: "Unsaved changes",
+        description:
+          "You have unsaved changes. Save and continue, or stay on this page to keep editing?",
+        confirmLabel: "Save & continue",
+        cancelLabel: "Stay",
+      });
+      if (cancelled) return;
+      if (!choice) {
+        blocker.reset();
+        return;
+      }
       try {
         setStatus("saving");
         await onSaveRef.current();
@@ -77,15 +98,18 @@ export function useAutoSave(signal: unknown, opts: Options) {
         setSavedAt(new Date());
         setDirty(false);
         setErrorMessage(null);
-        return false;
+        blocker.proceed();
       } catch (e) {
         setStatus("error");
         setErrorMessage(e instanceof Error ? e.message : "Save failed");
         console.error("[autosave/navguard]", e);
-        return true;
+        blocker.reset();
       }
-    },
-  });
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [blocker, confirm]);
 
   return { status, savedAt, dirty, errorMessage };
 }
