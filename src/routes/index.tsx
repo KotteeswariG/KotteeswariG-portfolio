@@ -60,7 +60,7 @@ function PortfolioPage() {
                   </span>
                   <span className="bullet-text">
                     One year of experience as a{" "}
-                    <strong>Junior Software Engineer</strong>
+                    <strong>Software Engineer</strong>
                   </span>
                 </li>
                 <li>
@@ -326,21 +326,71 @@ function PortfolioPage() {
               <section className="skills-section">
                 <h3>Programming Languages</h3>
                 <ul className="skills-list">
-                  <li>HTML5</li>
-                  <li>CSS3</li>
-                  <li>JavaScript</li>
                   <li>Python</li>
+                  <li>TypeScript</li>
+                  <li>HTML</li>
+                  <li>CSS</li>
                 </ul>
               </section>
 
               <section className="skills-section">
-                <h3>Tools &amp; Technologies</h3>
+                <h3>Frameworks &amp; Libraries</h3>
                 <ul className="skills-list">
-                  <li>Git &amp; GitHub</li>
-                  <li>Bootstrap</li>
+                  <li>Flask</li>
+                  <li>FastAPI</li>
+                  <li>Express.js</li>
+                  <li>Streamlit</li>
                 </ul>
               </section>
             </div>
+
+            <div className="skills-divider" aria-hidden="true"></div>
+
+            <div className="skills-top-grid">
+              <section className="skills-section">
+                <h3>AWS &amp; Cloud Services</h3>
+                <ul className="skills-list">
+                  <li>AWS Lambda</li>
+                  <li>S3</li>
+                  <li>SES</li>
+                  <li>SNS</li>
+                  <li>Docker</li>
+                </ul>
+              </section>
+
+              <section className="skills-section">
+                <h3>Data &amp; Databases</h3>
+                <ul className="skills-list">
+                  <li>MySQL</li>
+                  <li>Cosmos DB</li>
+                  <li>Airflow</li>
+                  <li>ETL</li>
+                </ul>
+              </section>
+            </div>
+
+            <div className="skills-divider" aria-hidden="true"></div>
+
+            <section className="skills-section">
+              <h3>Tools &amp; Collaboration</h3>
+              <ul className="skills-list">
+                <li>
+                  <strong>Git &amp; GitLab:</strong> Version control and
+                  collaboration on team repositories.
+                </li>
+                <li>
+                  <strong>Jira:</strong> Task management and sprint tracking.
+                </li>
+                <li>
+                  <strong>Confluence:</strong> Technical documentation and
+                  knowledge sharing.
+                </li>
+                <li>
+                  <strong>Code Review:</strong> Reviewing pull requests and
+                  giving constructive feedback to teammates.
+                </li>
+              </ul>
+            </section>
 
             <div className="skills-divider" aria-hidden="true"></div>
 
@@ -349,18 +399,18 @@ function PortfolioPage() {
               <ul className="skills-list">
                 <li>
                   <strong>Backend development:</strong> One year's industry
-                  experience as a Junior Software Engineer.
+                  experience as a Software Engineer.
                 </li>
                 <li>
                   <strong>Web development:</strong> Building responsive,
-                  standards-compliant websites with HTML, CSS, and JavaScript.
+                  standards-compliant websites with HTML, CSS, and TypeScript.
                 </li>
                 <li>
                   <strong>Python programming:</strong> Writing scripts,
                   automating tasks, and prototyping backend logic.
                 </li>
                 <li>
-                  <strong>Version control:</strong> Day-to-day Git and GitHub
+                  <strong>Version control:</strong> Day-to-day Git and GitLab
                   use across collaborative projects.
                 </li>
               </ul>
