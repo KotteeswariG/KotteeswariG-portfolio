@@ -1391,7 +1391,7 @@ section.resume-section .resume-date {
 
 .blog-notes-link {
   display: grid;
-  grid-template-columns: 4.5rem 1fr auto;
+  grid-template-columns: 4.5rem 1fr 5rem;
   align-items: baseline;
   gap: 1.25rem;
   padding: 0.55rem 0;
@@ -1431,6 +1431,7 @@ section.resume-section .resume-date {
   letter-spacing: 0.04em;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
+  text-align: right;
 }
 
 @media (max-width: 575.98px) {
